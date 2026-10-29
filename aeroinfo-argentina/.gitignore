@@ -7,3 +7,5 @@
 /storage/app/imports/*.shp
 /storage/logs/*.log
 .phpunit.result.cache
+__pycache__/
+*.pyc
