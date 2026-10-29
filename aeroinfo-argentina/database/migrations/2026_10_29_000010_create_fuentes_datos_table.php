@@ -1,0 +1,3 @@
+<?php
+use Illuminate\Database\Migrations\Migration; use Illuminate\Database\Schema\Blueprint; use Illuminate\Support\Facades\Schema;
+return new class extends Migration { public function up():void{Schema::create('fuentes_datos',function(Blueprint $t){$t->id();$t->string('nombre');$t->string('organismo')->nullable();$t->text('url_referencia');$t->string('tipo_recurso')->nullable();$t->text('condiciones_acceso')->nullable();$t->string('frecuencia_actualizacion')->nullable();$t->date('fecha_ultima_consulta')->nullable();$t->string('estado')->default('activa');$t->timestamps();});} public function down():void{Schema::dropIfExists('fuentes_datos');}};

@@ -1,0 +1,6 @@
+@import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
+:root{--background:#f7f9fc;--surface:#ffffff;--foreground:#172033;--muted:#667085;--border:#dfe5ee;--primary:#0b4a8b;--primary-fg:#ffffff}
+.dark{--background:#07111f;--surface:#0d1b2a;--foreground:#eef5ff;--muted:#aab7c8;--border:#26384d;--primary:#58a6ff;--primary-fg:#06111f}
+@theme inline{--color-background:var(--background);--color-surface:var(--surface);--color-foreground:var(--foreground);--color-muted:var(--muted);--color-border:var(--border);--color-primary:var(--primary);--color-primary-foreground:var(--primary-fg)}
+html{color-scheme:light}.dark{color-scheme:dark}body{min-height:100vh}a,button,input,select{outline-offset:3px}.leaflet-container{min-height:520px;border-radius:1rem}

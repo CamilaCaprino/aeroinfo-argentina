@@ -1,0 +1,3 @@
+<?php
+use Illuminate\Database\Migrations\Migration;use Illuminate\Database\Schema\Blueprint;use Illuminate\Support\Facades\Schema;
+return new class extends Migration{public function up():void{Schema::create('pistas',function(Blueprint $t){$t->id();$t->foreignId('aerodromo_id')->constrained()->cascadeOnDelete();$t->string('designacion')->nullable();$t->string('superficie')->nullable();$t->decimal('largo_m',10,2)->nullable();$t->decimal('ancho_m',10,2)->nullable();$t->string('orientacion')->nullable();$t->string('estado_validacion')->default('pendiente');$t->jsonb('source_record_json')->nullable();$t->timestamps();});}public function down():void{Schema::dropIfExists('pistas');}};

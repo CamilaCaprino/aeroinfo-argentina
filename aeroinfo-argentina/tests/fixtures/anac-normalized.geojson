@@ -1,0 +1,1 @@
+{"type":"FeatureCollection","features":[{"type":"Feature","geometry":{"type":"Point","coordinates":[-58.0,-34.0]},"properties":{"source_id":"fixture-1","nombre":"REGISTRO DE PRUEBA NO OFICIAL","designador_oaci":null,"designador_iata":null,"designador_local":"TEST","tipo":"PRUEBA","localidad":null,"provincia":"Buenos Aires","elevacion_m":null,"uso":null,"_raw":{"fixture":true}}}]}

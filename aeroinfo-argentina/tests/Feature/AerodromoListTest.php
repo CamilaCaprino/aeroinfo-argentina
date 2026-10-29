@@ -1,0 +1,3 @@
+<?php
+namespace Tests\Feature;use App\Models\Aerodromo;use Illuminate\Foundation\Testing\RefreshDatabase;use Tests\TestCase;
+class AerodromoListTest extends TestCase{use RefreshDatabase;public function test_listado_carga_y_busca():void{Aerodromo::create(['slug'=>'test-1','nombre'=>'Aeródromo Prueba','designador_oaci'=>'SAAA','provincia'=>'Buenos Aires']);$this->get('/aerodromos?q=SAAA')->assertOk()->assertInertia(fn($p)=>$p->component('Aerodromos/Index')->has('aerodromos.data',1));}public function test_ficha_inexistente_devuelve_404():void{$this->get('/aerodromos/no-existe')->assertNotFound();}}
