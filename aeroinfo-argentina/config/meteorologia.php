@@ -19,15 +19,32 @@ return [
     'windguru' => [
         'enabled' => env('WINDGURU_ENABLED', false),
 
-        'username' => env('WINDGURU_USERNAME'),
-        'secondary_password' => env(
-            'WINDGURU_SECONDARY_PASSWORD'
-        ),
+        'api_key' => env('WINDGURU_API_KEY'),
 
-        'model' => env('WINDGURU_MODEL', 'swrfar'),
+        'model' => env(
+            'WINDGURU_MODEL',
+            'gfs'
+        ),
 
         'cache_minutes' => env(
             'WINDGURU_CACHE_MINUTES',
+            60
+        ),
+    ],
+
+    'open_meteo' => [
+        'enabled' => env(
+            'OPEN_METEO_ENABLED',
+            true
+        ),
+
+        'model' => env(
+            'OPEN_METEO_MODEL',
+            'ecmwf_ifs'
+        ),
+
+        'cache_minutes' => env(
+            'OPEN_METEO_CACHE_MINUTES',
             60
         ),
     ],
