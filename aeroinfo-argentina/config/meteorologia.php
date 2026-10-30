@@ -48,5 +48,16 @@ return [
             60
         ),
     ],
+    
+    'taf' => [
+        'enabled' => env(
+            'TAF_ENABLED',
+            true
+        ),
 
+        'cache_minutes' => env(
+            'TAF_CACHE_MINUTES',
+            10
+        ),
+    ],
 ];

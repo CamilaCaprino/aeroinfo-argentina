@@ -6,6 +6,7 @@ use App\Http\Requests\AerodromoIndexRequest;
 use App\Models\Aerodromo;
 use App\Services\Aerodromos\AerodromoQueryService;
 use App\Services\Meteorologia\MeteorologiaService;
+use App\Services\Notam\AerodromoNotamService;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -36,17 +37,25 @@ class AerodromoController extends Controller
         return Inertia::render(
             'Aerodromos/Index',
             [
-                'aerodromos' => $service->paginate($filters),
-                'filters' => $filters,
-                'provincias' => $provincias,
-                'tipos' => $tipos,
+                'aerodromos' =>
+                    $service->paginate($filters),
+
+                'filters' =>
+                    $filters,
+
+                'provincias' =>
+                    $provincias,
+
+                'tipos' =>
+                    $tipos,
             ]
         );
     }
 
     public function show(
         Aerodromo $aerodromo,
-        MeteorologiaService $meteorologiaService
+        MeteorologiaService $meteorologiaService,
+        AerodromoNotamService $notamService
     ): Response {
         $aerodromo->load([
             'referencias.fuente',
@@ -58,11 +67,22 @@ class AerodromoController extends Controller
                 $aerodromo
             );
 
+        $notams =
+            $notamService->forAerodromo(
+                $aerodromo
+            );
+
         return Inertia::render(
             'Aerodromos/Show',
             [
-                'aerodromo' => $aerodromo,
-                'meteorologia' => $meteorologia,
+                'aerodromo' =>
+                    $aerodromo,
+
+                'meteorologia' =>
+                    $meteorologia,
+
+                'notams' =>
+                    $notams,
             ]
         );
     }

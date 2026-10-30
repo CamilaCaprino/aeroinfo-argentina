@@ -12,12 +12,43 @@ class MeteorologiaService
     public function __construct(
         private SmnService $smnService,
         private OpenMeteoService $openMeteoService,
+        private MetarService $metarService,
+        private TafService $tafService,
     ) {
     }
 
     public function forAerodromo(
         Aerodromo $aerodromo
     ): array {
+        /*
+         * OACI
+         *
+         * METAR y TAF se consultan por designador OACI.
+         */
+        $oaci = $this->oaci(
+            $aerodromo
+        );
+
+        /*
+         * METAR / SPECI
+         */
+        $metar = $oaci
+            ? $this->metarService->current($oaci)
+            : $this->sinOaci();
+
+        /*
+         * TAF
+         */
+        $taf = $oaci
+            ? $this->tafService->current($oaci)
+            : $this->sinOaci();
+
+        /*
+         * Coordenadas
+         *
+         * SMN y ECMWF sí dependen de la ubicación
+         * geográfica del aeródromo.
+         */
         $latitude = $this->number(
             $aerodromo->latitud
         );
@@ -31,16 +62,39 @@ class MeteorologiaService
             || $longitude === null
         ) {
             return [
-                'status' => 'no_location',
+                'status' => 'partial',
+
+                'location' => null,
+
+                'metar' =>
+                    $metar,
+
+                'taf' =>
+                    $taf,
 
                 'observacion' => [
-                    'status' => 'no_location',
-                    'data' => null,
+                    'status' =>
+                        'no_location',
+
+                    'data' =>
+                        null,
+
+                    'error' =>
+                        null,
+
+                    'association' =>
+                        null,
                 ],
 
                 'pronostico' => [
-                    'status' => 'no_location',
-                    'data' => null,
+                    'status' =>
+                        'no_location',
+
+                    'data' =>
+                        null,
+
+                    'error' =>
+                        null,
                 ],
             ];
         }
@@ -48,12 +102,13 @@ class MeteorologiaService
         /*
          * OBSERVACIÓN SMN
          */
-        $observacion = $this->observacionSmn(
-            $aerodromo
-        );
+        $observacion =
+            $this->observacionSmn(
+                $aerodromo
+            );
 
         /*
-         * PRONÓSTICO
+         * PRONÓSTICO ECMWF
          *
          * Se consulta directamente para las coordenadas
          * del aeródromo, no para la estación SMN.
@@ -68,16 +123,62 @@ class MeteorologiaService
             'status' => 'ok',
 
             'location' => [
-                'lat' => $latitude,
-                'lon' => $longitude,
+                'lat' =>
+                    $latitude,
+
+                'lon' =>
+                    $longitude,
             ],
 
+            /*
+             * Productos meteorológicos aeronáuticos.
+             */
+            'metar' =>
+                $metar,
+
+            'taf' =>
+                $taf,
+
+            /*
+             * Información meteorológica complementaria.
+             */
             'observacion' =>
                 $observacion,
 
             'pronostico' =>
                 $pronostico,
         ];
+    }
+
+    private function sinOaci(): array
+    {
+        return [
+            'status' =>
+                'no_icao',
+
+            'data' =>
+                null,
+
+            'error' =>
+                null,
+        ];
+    }
+
+    private function oaci(
+        Aerodromo $aerodromo
+    ): ?string {
+        $oaci = strtoupper(
+            trim(
+                (string)
+                $aerodromo->designador_oaci
+            )
+        );
+
+        if ($oaci === '') {
+            return null;
+        }
+
+        return $oaci;
     }
 
     private function observacionSmn(
@@ -158,7 +259,8 @@ class MeteorologiaService
             }
 
             $distanceKm =
-                (float) $nearest->distance_km;
+                (float)
+                $nearest->distance_km;
 
             $association =
                 $this->classifyDistance(
@@ -252,7 +354,8 @@ class MeteorologiaService
         Aerodromo $aerodromo
     ): ?EstacionMeteorologica {
         $oaci = trim(
-            (string) $aerodromo->designador_oaci
+            (string)
+            $aerodromo->designador_oaci
         );
 
         if ($oaci === '') {
@@ -260,7 +363,10 @@ class MeteorologiaService
         }
 
         return EstacionMeteorologica::query()
-            ->where('activa', true)
+            ->where(
+                'activa',
+                true
+            )
             ->whereRaw(
                 'UPPER(TRIM(codigo_oaci)) = ?',
                 [
@@ -288,8 +394,8 @@ class MeteorologiaService
             FROM aerodromos a
             CROSS JOIN estaciones_meteorologicas e
             WHERE a.id = ?
-            AND e.activa = true
-            AND e.ubicacion IS NOT NULL
+              AND e.activa = true
+              AND e.ubicacion IS NOT NULL
             ORDER BY
                 ST_Distance(
                     a.ubicacion,
@@ -316,7 +422,8 @@ class MeteorologiaService
         }
 
         $estacion->distance_km =
-            (float) $row->distance_km;
+            (float)
+            $row->distance_km;
 
         return $estacion;
     }
@@ -360,7 +467,8 @@ class MeteorologiaService
         }
 
         return round(
-            (float) $result->distance_km,
+            (float)
+            $result->distance_km,
             1
         );
     }
