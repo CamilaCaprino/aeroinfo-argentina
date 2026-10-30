@@ -10,9 +10,31 @@ export default function Home({ hasData }: { hasData: boolean }) {
         <AppLayout>
             <Head title="Inicio" />
 
-            <section className="relative overflow-hidden border-b border-border/80 bg-background">
-                <div className="aeroinfo-grid absolute inset-0 opacity-45" aria-hidden="true" />
-                <div className="absolute left-1/2 top-[-7rem] h-[30rem] w-[52rem] -translate-x-1/2 rounded-full bg-primary/[0.045] blur-3xl" aria-hidden="true" />
+            <section className="aeroinfo-hero relative overflow-hidden border-b border-border/80 bg-background">
+                <div className="airport-ambient" aria-hidden="true">
+                    <div className="aeroinfo-grid absolute inset-0 opacity-45" />
+                    <div className="airport-glow airport-glow-a" />
+                    <div className="airport-glow airport-glow-b" />
+                    <div className="airport-runway airport-runway-main" />
+                    <div className="airport-runway airport-runway-secondary" />
+                    <div className="airport-taxiway airport-taxiway-a" />
+                    <div className="airport-taxiway airport-taxiway-b" />
+                    <div className="airport-route airport-route-a" />
+                    <div className="airport-route airport-route-b" />
+                    <div className="airport-radar">
+                        <span className="airport-radar-ring airport-radar-ring-1" />
+                        <span className="airport-radar-ring airport-radar-ring-2" />
+                        <span className="airport-radar-ring airport-radar-ring-3" />
+                        <span className="airport-radar-sweep" />
+                        <span className="airport-radar-core" />
+                    </div>
+                    <span className="airport-flight-dot airport-flight-dot-1" />
+                    <span className="airport-flight-dot airport-flight-dot-2" />
+                    <span className="airport-flight-dot airport-flight-dot-3" />
+                    <span className="airport-flight-dot airport-flight-dot-4" />
+                    <span className="airport-beacon airport-beacon-1" />
+                    <span className="airport-beacon airport-beacon-2" />
+                </div>
 
                 <div className="relative mx-auto max-w-7xl px-5 pb-12 pt-14 sm:px-6 md:pb-14 md:pt-[4.35rem] lg:px-8">
                     <div className="mx-auto max-w-[64rem] text-center">
