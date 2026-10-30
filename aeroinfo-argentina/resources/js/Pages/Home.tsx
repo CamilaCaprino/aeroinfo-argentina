@@ -14,20 +14,20 @@ export default function Home({ hasData }: { hasData: boolean }) {
                 <div className="aeroinfo-grid absolute inset-0 opacity-45" aria-hidden="true" />
                 <div className="absolute left-1/2 top-[-7rem] h-[30rem] w-[52rem] -translate-x-1/2 rounded-full bg-primary/[0.045] blur-3xl" aria-hidden="true" />
 
-                <div className="relative mx-auto max-w-7xl px-5 py-14 sm:px-6 md:py-[4.5rem] lg:px-8">
-                    <div className="mx-auto max-w-[58rem] text-center">
+                <div className="relative mx-auto max-w-7xl px-5 pb-12 pt-14 sm:px-6 md:pb-14 md:pt-[4.35rem] lg:px-8">
+                    <div className="mx-auto max-w-[64rem] text-center">
                         <p className="section-eyebrow">Información aeronáutica trazable</p>
 
-                        <h1 className="mx-auto mt-4 max-w-[54rem] text-balance text-[2.55rem] font-semibold leading-[1.06] tracking-[-0.038em] text-foreground sm:text-5xl md:text-[3.55rem] lg:text-[3.9rem]">
+                        <h1 className="mx-auto mt-4 max-w-[59rem] text-balance text-[2.7rem] font-semibold leading-[1.06] tracking-[-0.038em] text-foreground sm:text-[3.25rem] md:text-[3.8rem] lg:text-[4.15rem]">
                             Encontrá aeródromos y helipuertos de Argentina
                         </h1>
 
-                        <p className="mx-auto mt-5 max-w-[43rem] text-pretty text-[0.98rem] leading-7 text-muted sm:text-[1.05rem]">
+                        <p className="mx-auto mt-5 max-w-[46rem] text-pretty text-[0.98rem] leading-7 text-muted sm:text-[1.05rem]">
                             Inventario basado en ANAC / Secretaría de Transporte, con referencias documentales y mapa interactivo.
                         </p>
                     </div>
 
-                    <div className="search-panel mx-auto mt-9 max-w-[50rem]">
+                    <div className="search-panel mx-auto mt-9 max-w-[56rem]">
                         <form
                             className="flex flex-col gap-2.5 sm:flex-row"
                             onSubmit={(e) => {
@@ -63,7 +63,7 @@ export default function Home({ hasData }: { hasData: boolean }) {
                     </div>
 
                     {!hasData && (
-                        <div className="status-panel mx-auto mt-4 max-w-[50rem]">
+                        <div className="status-panel mx-auto mt-4 max-w-[56rem]">
                             <div className="flex items-start gap-3.5">
                                 <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-[0.7rem] border border-primary/10 bg-primary/[0.07] text-primary">
                                     <Database size={18} aria-hidden="true" />
@@ -78,7 +78,7 @@ export default function Home({ hasData }: { hasData: boolean }) {
                         </div>
                     )}
 
-                    <div className="mx-auto mt-5 grid max-w-[50rem] gap-3 sm:grid-cols-2">
+                    <div className="mx-auto mt-5 grid max-w-[56rem] gap-3 sm:grid-cols-2">
                         <Link href="/aerodromos" className="action-card group">
                             <div className="min-w-0">
                                 <p className="action-kicker">Directorio</p>

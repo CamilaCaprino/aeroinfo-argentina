@@ -5,7 +5,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
     return (
         <div className="flex min-h-screen flex-col bg-background">
             <header className="sticky top-0 z-50 border-b border-border/85 bg-surface/94 backdrop-blur-xl">
-                <div className="mx-auto flex h-[66px] max-w-7xl items-center justify-between gap-5 px-5 sm:px-6 lg:px-8">
+                <div className="mx-auto flex h-[64px] max-w-[86rem] items-center justify-between gap-5 px-5 sm:px-6 lg:px-8">
                     <Link href="/" className="group flex items-center gap-3" aria-label="Aeroinfo Argentina - Inicio">
                         <span className="brand-mark">AR</span>
                         <span className="text-[14px] font-semibold tracking-[-0.012em] text-foreground sm:text-[14.5px]">
@@ -14,7 +14,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
                     </Link>
 
                     <div className="flex items-center gap-4 sm:gap-5">
-                        <nav className="hidden items-center gap-6 text-[13px] font-medium text-muted md:flex" aria-label="Navegación principal">
+                        <nav className="hidden items-center gap-7 text-[13px] font-medium text-muted md:flex" aria-label="Navegación principal">
                             <Link className="nav-link" href="/aerodromos">Aeródromos</Link>
                             <Link className="nav-link" href="/mapa">Mapa</Link>
                             <Link className="nav-link" href="/fuentes">Fuentes</Link>
@@ -28,7 +28,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
             <main className="flex-1">{children}</main>
 
             <footer className="border-t border-border bg-surface/72">
-                <div className="mx-auto grid max-w-7xl gap-7 px-5 py-8 text-[0.8rem] sm:px-6 md:grid-cols-[1.55fr_0.9fr_1fr] lg:px-8">
+                <div className="mx-auto grid max-w-[86rem] gap-8 px-5 py-7 text-[0.8rem] sm:px-6 md:grid-cols-[1.55fr_0.9fr_1fr] lg:px-8">
                     <div>
                         <p className="text-[0.82rem] font-semibold text-foreground">Aeroinfo Argentina</p>
                         <p className="mt-1.5 max-w-md leading-[1.55] text-muted">
