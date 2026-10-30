@@ -30,9 +30,9 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
             <footer className="border-t border-border bg-surface/72">
                 <div className="mx-auto grid max-w-[86rem] gap-8 px-5 py-7 text-[0.8rem] sm:px-6 md:grid-cols-[1.55fr_0.9fr_1fr] lg:px-8">
                     <div>
-                        <p className="text-[0.82rem] font-semibold text-foreground">Aeroinfo Argentina</p>
+                        <p className="text-[0.82rem] font-semibold text-foreground">Aeroinfo Argentina · 2026</p>
                         <p className="mt-1.5 max-w-md leading-[1.55] text-muted">
-                            Proyecto independiente de consulta y organización de información aeronáutica pública de Argentina.
+                           Información aeronáutica de referencia. No sustituye publicaciones oficiales.
                         </p>
                     </div>
 
@@ -42,10 +42,12 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
                         <p className="text-muted">Septiembre 2026</p>
                     </div>
 
-                    <div>
-                        <p className="footer-label">Aviso</p>
-                        <p className="mt-1.5 max-w-sm leading-[1.55] text-muted">
-                            No sustituye publicaciones aeronáuticas oficiales ni información previa al vuelo.
+                    <div className="text-xs text-slate-500 md:text-right">
+                        <p>
+                            Proyecto independiente · Diseño y desarrollo:
+                            <span className="ml-1 font-medium text-slate-300">
+                                Camila Caprino
+                            </span>
                         </p>
                     </div>
                 </div>
