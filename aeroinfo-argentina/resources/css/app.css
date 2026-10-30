@@ -1,6 +1,137 @@
 @import "tailwindcss";
 @custom-variant dark (&:where(.dark, .dark *));
-:root{--background:#f7f9fc;--surface:#ffffff;--foreground:#172033;--muted:#667085;--border:#dfe5ee;--primary:#0b4a8b;--primary-fg:#ffffff}
-.dark{--background:#07111f;--surface:#0d1b2a;--foreground:#eef5ff;--muted:#aab7c8;--border:#26384d;--primary:#58a6ff;--primary-fg:#06111f}
-@theme inline{--color-background:var(--background);--color-surface:var(--surface);--color-foreground:var(--foreground);--color-muted:var(--muted);--color-border:var(--border);--color-primary:var(--primary);--color-primary-foreground:var(--primary-fg)}
-html{color-scheme:light}.dark{color-scheme:dark}body{min-height:100vh}a,button,input,select{outline-offset:3px}.leaflet-container{min-height:520px;border-radius:1rem}
+
+:root {
+    --background: #f7f9fc;
+    --surface: #ffffff;
+    --foreground: #172033;
+    --muted: #667085;
+    --border: #dfe5ee;
+    --primary: #0b4a8b;
+    --primary-fg: #ffffff;
+}
+
+.dark {
+    --background: #07111f;
+    --surface: #0d1b2a;
+    --foreground: #eef5ff;
+    --muted: #aab7c8;
+    --border: #26384d;
+    --primary: #58a6ff;
+    --primary-fg: #06111f;
+}
+
+@theme inline {
+    --color-background: var(--background);
+    --color-surface: var(--surface);
+    --color-foreground: var(--foreground);
+    --color-muted: var(--muted);
+    --color-border: var(--border);
+    --color-primary: var(--primary);
+    --color-primary-foreground: var(--primary-fg);
+}
+
+html {
+    color-scheme: light;
+    background: var(--background);
+}
+
+.dark {
+    color-scheme: dark;
+}
+
+body {
+    min-height: 100vh;
+    margin: 0;
+    background: var(--background);
+    color: var(--foreground);
+    font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+}
+
+a,
+button,
+input,
+select {
+    outline-offset: 3px;
+}
+
+button,
+a {
+    -webkit-tap-highlight-color: transparent;
+}
+
+.section-eyebrow {
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--primary);
+}
+
+.nav-link {
+    position: relative;
+    transition: color 160ms ease;
+}
+
+.nav-link:hover {
+    color: var(--foreground);
+}
+
+.nav-link::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 100%;
+    bottom: -8px;
+    height: 2px;
+    border-radius: 999px;
+    background: var(--primary);
+    transition: right 180ms ease;
+}
+
+.nav-link:hover::after {
+    right: 0;
+}
+
+.action-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    min-height: 96px;
+    padding: 1.25rem 1.35rem;
+    border: 1px solid var(--border);
+    border-radius: 1rem;
+    background: color-mix(in srgb, var(--surface) 96%, transparent);
+    box-shadow: 0 8px 28px rgba(23, 32, 51, 0.035);
+    transition: transform 160ms ease, border-color 160ms ease, box-shadow 160ms ease;
+}
+
+.action-card:hover {
+    transform: translateY(-2px);
+    border-color: color-mix(in srgb, var(--primary) 38%, var(--border));
+    box-shadow: 0 16px 38px rgba(23, 32, 51, 0.07);
+}
+
+.footer-label {
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--foreground);
+}
+
+.aeroinfo-grid {
+    background-image:
+        linear-gradient(to right, color-mix(in srgb, var(--border) 35%, transparent) 1px, transparent 1px),
+        linear-gradient(to bottom, color-mix(in srgb, var(--border) 35%, transparent) 1px, transparent 1px);
+    background-size: 42px 42px;
+    mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.52), transparent 82%);
+}
+
+.leaflet-container {
+    min-height: 520px;
+    border-radius: 1rem;
+}
