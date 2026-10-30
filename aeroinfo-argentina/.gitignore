@@ -1,11 +1,59 @@
 /.env
+
 /vendor
 /node_modules
+
 /public/build
+
 /storage/*.key
-/storage/app/imports/*.zip
-/storage/app/imports/*.shp
 /storage/logs/*.log
-.phpunit.result.cache
+
+# Archivos locales de importación
+/storage/app/imports/
+
+# Entorno virtual Python
+/.venv/
+
+# Archivos temporales del editor
+*.swp
+*.swo
+
+# Caché Python
 __pycache__/
 *.pyc
+
+.phpunit.result.cache
+
+# Laravel runtime cache
+/bootstrap/cache/*
+!/bootstrap/cache/.gitignore
+
+# Storage runtime
+/storage/framework/*
+!/storage/framework/.gitignore
+/storage/logs/*
+!/storage/logs/.gitignore
+
+# Imports locales
+/storage/app/imports/
+
+# Laravel runtime cache
+/bootstrap/cache/*
+!/bootstrap/cache/.gitignore
+
+# Storage runtime
+/storage/framework/*
+!/storage/framework/.gitignore
+
+/storage/logs/*
+!/storage/logs/.gitignore
+
+# Imports locales
+/storage/app/imports/
+
+# Python local environment
+/.venv/
+
+# Editor temp files
+*.swp
+*.swo
