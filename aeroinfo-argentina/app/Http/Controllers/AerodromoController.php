@@ -17,14 +17,29 @@ class AerodromoController extends Controller
     ): Response {
         $filters = $request->validated();
 
+        $provincias = Aerodromo::query()
+            ->whereNotNull('provincia')
+            ->where('provincia', '<>', '')
+            ->distinct()
+            ->orderBy('provincia')
+            ->pluck('provincia')
+            ->values();
+
+        $tipos = Aerodromo::query()
+            ->whereNotNull('tipo')
+            ->where('tipo', '<>', '')
+            ->distinct()
+            ->orderBy('tipo')
+            ->pluck('tipo')
+            ->values();
+
         return Inertia::render(
             'Aerodromos/Index',
             [
-                'aerodromos' =>
-                    $service->search($filters),
-
-                'filters' =>
-                    $filters,
+                'aerodromos' => $service->paginate($filters),
+                'filters' => $filters,
+                'provincias' => $provincias,
+                'tipos' => $tipos,
             ]
         );
     }
@@ -46,11 +61,8 @@ class AerodromoController extends Controller
         return Inertia::render(
             'Aerodromos/Show',
             [
-                'aerodromo' =>
-                    $aerodromo,
-
-                'meteorologia' =>
-                    $meteorologia,
+                'aerodromo' => $aerodromo,
+                'meteorologia' => $meteorologia,
             ]
         );
     }
