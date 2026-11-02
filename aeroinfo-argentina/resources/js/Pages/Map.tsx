@@ -1,5 +1,4 @@
 import { Head, Link } from '@inertiajs/react';
-import AppLayout from '../Layouts/AppLayout';
 import {
     MapContainer,
     Marker,
@@ -10,6 +9,9 @@ import {
 import MarkerClusterGroup from 'react-leaflet-cluster';
 import L from 'leaflet';
 import { useEffect, useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+
+import AppLayout from '../Layouts/AppLayout';
 
 const ARGENTINA_CENTER: [number, number] = [-38.4, -64.2];
 
@@ -143,7 +145,7 @@ function FitFilteredPoints({
         );
 
         map.fitBounds(bounds, {
-            padding: [60, 60],
+            padding: [40, 40],
             maxZoom: 10,
         });
     }, [points, active, map]);
@@ -180,8 +182,12 @@ export default function MapPage({
     tileUrl,
     attribution,
 }: any) {
+    const { t, i18n } = useTranslation();
+
     const [tipo, setTipo] = useState('');
     const [provincia, setProvincia] = useState('');
+    const [filtersOpen, setFiltersOpen] =
+        useState(false);
 
     const query = new URLSearchParams(
         typeof window !== 'undefined'
@@ -195,17 +201,20 @@ export default function MapPage({
     const selectedSlug = query.get('selected');
 
     const initialLat =
-        queryLat !== null && !Number.isNaN(Number(queryLat))
+        queryLat !== null &&
+        !Number.isNaN(Number(queryLat))
             ? Number(queryLat)
             : null;
 
     const initialLon =
-        queryLon !== null && !Number.isNaN(Number(queryLon))
+        queryLon !== null &&
+        !Number.isNaN(Number(queryLon))
             ? Number(queryLon)
             : null;
 
     const initialZoom =
-        queryZoom !== null && !Number.isNaN(Number(queryZoom))
+        queryZoom !== null &&
+        !Number.isNaN(Number(queryZoom))
             ? Number(queryZoom)
             : 11;
 
@@ -217,176 +226,373 @@ export default function MapPage({
         window.scrollTo(0, 0);
     }, []);
 
+    const locale =
+        i18n.resolvedLanguage === 'de'
+            ? 'de'
+            : i18n.resolvedLanguage === 'pt'
+              ? 'pt'
+              : i18n.resolvedLanguage === 'en'
+                ? 'en'
+                : 'es';
+
     const provincias = useMemo(() => {
         return Array.from(
             new Set(
                 points
-                    .map((point: any) => point.provincia)
+                    .map(
+                        (point: any) =>
+                            point.provincia
+                    )
                     .filter(Boolean)
             )
         ).sort((a: any, b: any) =>
-            String(a).localeCompare(String(b), 'es')
+            String(a).localeCompare(
+                String(b),
+                locale
+            )
         );
-    }, [points]);
+    }, [points, locale]);
 
     const filteredPoints = useMemo(() => {
-        return points.filter((point: any) => {
-            const pointTipo = String(point.tipo || '').toLowerCase();
+        return points.filter(
+            (point: any) => {
+                const pointTipo = String(
+                    point.tipo || ''
+                ).toLowerCase();
 
-            const matchesTipo =
-                !tipo ||
-                pointTipo === tipo.toLowerCase();
+                const matchesTipo =
+                    !tipo ||
+                    pointTipo ===
+                        tipo.toLowerCase();
 
-            const matchesProvincia =
-                !provincia ||
-                point.provincia === provincia;
+                const matchesProvincia =
+                    !provincia ||
+                    point.provincia ===
+                        provincia;
 
-            return matchesTipo && matchesProvincia;
-        });
-    }, [points, tipo, provincia]);
+                return (
+                    matchesTipo &&
+                    matchesProvincia
+                );
+            }
+        );
+    }, [
+        points,
+        tipo,
+        provincia,
+    ]);
 
-    const totalAerodromos = points.filter((point: any) => {
-        const value = String(point.tipo || '').toLowerCase();
+    const totalAerodromos =
+        points.filter((point: any) => {
+            const value = String(
+                point.tipo || ''
+            ).toLowerCase();
 
-        return value === 'aeródromo' || value === 'aerodromo';
-    }).length;
+            return (
+                value === 'aeródromo' ||
+                value === 'aerodromo'
+            );
+        }).length;
 
-    const totalHelipuertos = points.filter(
-        (point: any) =>
-            String(point.tipo || '').toLowerCase() === 'helipuerto'
-    ).length;
+    const totalHelipuertos =
+        points.filter(
+            (point: any) =>
+                String(
+                    point.tipo || ''
+                ).toLowerCase() ===
+                'helipuerto'
+        ).length;
 
-    const filtersActive = Boolean(tipo || provincia);
+    const filtersActive =
+        Boolean(tipo || provincia);
+
+    function clearFilters() {
+        setTipo('');
+        setProvincia('');
+        setFiltersOpen(false);
+    }
+
+    function facilityType(
+        value?: string
+    ) {
+        const normalized = String(
+            value || ''
+        )
+            .toLowerCase()
+            .normalize('NFD')
+            .replace(
+                /[\u0300-\u036f]/g,
+                ''
+            );
+
+        if (
+            normalized === 'aerodromo'
+        ) {
+            return t(
+                'map.aerodrome'
+            );
+        }
+
+        if (
+            normalized ===
+            'helipuerto'
+        ) {
+            return t(
+                'map.heliport'
+            );
+        }
+
+        return (
+            value ||
+            t(
+                'map.facility'
+            )
+        );
+    }
 
     return (
         <AppLayout>
-            <Head title="Mapa nacional" />
+            <Head
+                title={t(
+                    'map.pageTitle'
+                )}
+            />
 
-            <div className="mx-auto max-w-[86rem] px-5 pb-10 pt-10 sm:px-6 md:pt-12 lg:px-8">
+            <div className="mx-auto max-w-[86rem] px-4 pb-8 pt-7 sm:px-6 md:pb-10 md:pt-12 lg:px-8">
                 <header>
                     <div className="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
                         <div>
                             <div className="text-xs font-medium uppercase tracking-[0.18em] text-primary">
-                                Inventario georreferenciado
+                                {t(
+                                    'map.eyebrow'
+                                )}
                             </div>
 
-                            <h1 className="mt-3 text-3xl font-semibold tracking-tight md:text-4xl">
-                                Mapa nacional
+                            <h1 className="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl">
+                                {t(
+                                    'map.title'
+                                )}
                             </h1>
 
                             <p className="mt-3 max-w-2xl text-sm leading-6 text-muted md:text-base">
-                                Explorá aeródromos y helipuertos registrados
-                                en la base mediante su ubicación geográfica.
+                                {t(
+                                    'map.description'
+                                )}
                             </p>
                         </div>
 
                         <Link
                             href="/aerodromos"
-                            className="inline-flex items-center justify-center rounded-lg border border-border bg-surface px-4 py-2.5 text-sm font-medium transition hover:bg-background"
+                            className="inline-flex w-full items-center justify-center rounded-lg border border-border bg-surface px-4 py-2.5 text-sm font-medium transition hover:bg-background sm:w-fit"
                         >
-                            Ver listado completo
+                            {t(
+                                'map.viewList'
+                            )}
                         </Link>
                     </div>
                 </header>
 
-                <div className="mt-7 grid gap-3 md:grid-cols-3">
+                <div className="mt-7 grid grid-cols-3 gap-2 sm:gap-3">
                     <Stat
-                        label="Instalaciones"
-                        value={points.length}
+                        label={t(
+                            'map.facilities'
+                        )}
+                        value={
+                            points.length
+                        }
                     />
 
                     <Stat
-                        label="Aeródromos"
-                        value={totalAerodromos}
+                        label={t(
+                            'map.aerodromes'
+                        )}
+                        value={
+                            totalAerodromos
+                        }
                     />
 
                     <Stat
-                        label="Helipuertos"
-                        value={totalHelipuertos}
+                        label={t(
+                            'map.heliports'
+                        )}
+                        value={
+                            totalHelipuertos
+                        }
                     />
                 </div>
 
                 <section className="mt-5 rounded-2xl border border-border bg-surface p-4 shadow-sm">
-                    <div className="grid gap-3 md:grid-cols-[1fr_1fr_auto]">
+                    <div className="flex items-center justify-between gap-3 md:hidden">
+                        <div>
+                            <div className="text-sm font-medium">
+                                {t(
+                                    'map.filters'
+                                )}
+                            </div>
+
+                            {filtersActive && (
+                                <div className="mt-0.5 text-xs text-primary">
+                                    {t(
+                                        'map.filtersActive'
+                                    )}
+                                </div>
+                            )}
+                        </div>
+
+                        <button
+                            type="button"
+                            onClick={() =>
+                                setFiltersOpen(
+                                    (
+                                        value
+                                    ) =>
+                                        !value
+                                )
+                            }
+                            className="rounded-lg border border-border bg-background px-3 py-2 text-sm font-medium"
+                        >
+                            {filtersOpen
+                                ? t(
+                                      'map.hideFilters'
+                                  )
+                                : t(
+                                      'map.showFilters'
+                                  )}
+                        </button>
+                    </div>
+
+                    <div
+                        className={[
+                            'gap-3',
+                            filtersOpen
+                                ? 'mt-4 grid'
+                                : 'hidden',
+                            'md:grid md:grid-cols-[1fr_1fr_auto]',
+                        ].join(' ')}
+                    >
                         <select
                             value={tipo}
-                            onChange={(event) =>
-                                setTipo(event.target.value)
+                            onChange={(
+                                event
+                            ) =>
+                                setTipo(
+                                    event
+                                        .target
+                                        .value
+                                )
                             }
-                            className="rounded-lg border border-border bg-background px-3.5 py-2.5 text-sm outline-none transition focus:border-primary"
+                            className="w-full rounded-lg border border-border bg-background px-3.5 py-2.5 text-sm outline-none transition focus:border-primary"
                         >
                             <option value="">
-                                Todas las instalaciones
+                                {t(
+                                    'map.allFacilities'
+                                )}
                             </option>
 
                             <option value="Aeródromo">
-                                Aeródromos
+                                {t(
+                                    'map.aerodromes'
+                                )}
                             </option>
 
                             <option value="Helipuerto">
-                                Helipuertos
+                                {t(
+                                    'map.heliports'
+                                )}
                             </option>
                         </select>
 
                         <select
-                            value={provincia}
-                            onChange={(event) =>
-                                setProvincia(event.target.value)
+                            value={
+                                provincia
                             }
-                            className="rounded-lg border border-border bg-background px-3.5 py-2.5 text-sm outline-none transition focus:border-primary"
+                            onChange={(
+                                event
+                            ) =>
+                                setProvincia(
+                                    event
+                                        .target
+                                        .value
+                                )
+                            }
+                            className="w-full rounded-lg border border-border bg-background px-3.5 py-2.5 text-sm outline-none transition focus:border-primary"
                         >
                             <option value="">
-                                Todas las provincias
+                                {t(
+                                    'map.allProvinces'
+                                )}
                             </option>
 
-                            {provincias.map((item: any) => (
-                                <option
-                                    key={item}
-                                    value={item}
-                                >
-                                    {item}
-                                </option>
-                            ))}
+                            {provincias.map(
+                                (
+                                    item: any
+                                ) => (
+                                    <option
+                                        key={
+                                            item
+                                        }
+                                        value={
+                                            item
+                                        }
+                                    >
+                                        {
+                                            item
+                                        }
+                                    </option>
+                                )
+                            )}
                         </select>
 
                         <button
                             type="button"
-                            disabled={!filtersActive}
-                            onClick={() => {
-                                setTipo('');
-                                setProvincia('');
-                            }}
+                            disabled={
+                                !filtersActive
+                            }
+                            onClick={
+                                clearFilters
+                            }
                             className="rounded-lg border border-border bg-background px-4 py-2.5 text-sm font-medium transition hover:bg-surface disabled:cursor-default disabled:opacity-40"
                         >
-                            Limpiar filtros
+                            {t(
+                                'map.clearFilters'
+                            )}
                         </button>
                     </div>
                 </section>
 
                 <div className="mt-5 overflow-hidden rounded-2xl border border-border bg-surface shadow-sm">
-                    <div className="flex flex-col gap-3 border-b border-border px-4 py-3 md:flex-row md:items-center md:justify-between md:px-5">
+                    <div className="flex flex-col gap-3 border-b border-border px-4 py-3 sm:px-5 lg:flex-row lg:items-center lg:justify-between">
                         <div>
                             <div className="text-sm font-medium">
-                                República Argentina
+                                {t(
+                                    'map.argentina'
+                                )}
                             </div>
 
                             <div className="mt-0.5 text-xs text-muted">
-                                {filteredPoints.length}{' '}
-                                {filteredPoints.length === 1
-                                    ? 'instalación visible'
-                                    : 'instalaciones visibles'}
+                                {t(
+                                    'map.visibleCount',
+                                    {
+                                        count:
+                                            filteredPoints.length,
+                                    }
+                                )}
                             </div>
                         </div>
 
-                        <div className="flex flex-wrap items-center gap-4 text-xs text-muted">
+                        <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-xs text-muted">
                             <Legend
                                 shape="circle"
-                                label="Aeródromo"
+                                label={t(
+                                    'map.aerodrome'
+                                )}
                             />
 
                             <Legend
                                 shape="diamond"
-                                label="Helipuerto"
+                                label={t(
+                                    'map.heliport'
+                                )}
                             />
 
                             <div className="hidden h-4 w-px bg-border sm:block" />
@@ -395,12 +601,17 @@ export default function MapPage({
                                 <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-slate-800 px-1 text-[9px] font-bold text-white">
                                     12
                                 </span>
-                                <span>Agrupación</span>
+
+                                <span>
+                                    {t(
+                                        'map.cluster'
+                                    )}
+                                </span>
                             </div>
                         </div>
                     </div>
 
-                    <div className="relative h-[72vh] min-h-[560px]">
+                    <div className="relative h-[62vh] min-h-[430px] sm:h-[68vh] sm:min-h-[520px] lg:h-[72vh] lg:min-h-[560px]">
                         <MapContainer
                             center={
                                 openedFromAerodromo
@@ -433,14 +644,22 @@ export default function MapPage({
 
                             {openedFromAerodromo && (
                                 <InitialLocation
-                                    lat={initialLat}
-                                    lon={initialLon}
-                                    zoom={initialZoom}
+                                    lat={
+                                        initialLat
+                                    }
+                                    lon={
+                                        initialLon
+                                    }
+                                    zoom={
+                                        initialZoom
+                                    }
                                 />
                             )}
 
                             <FitFilteredPoints
-                                points={filteredPoints}
+                                points={
+                                    filteredPoints
+                                }
                                 active={
                                     filtersActive &&
                                     !openedFromAerodromo
@@ -449,129 +668,175 @@ export default function MapPage({
 
                             <MarkerClusterGroup
                                 chunkedLoading
-                                maxClusterRadius={48}
-                                disableClusteringAtZoom={11}
+                                maxClusterRadius={
+                                    48
+                                }
+                                disableClusteringAtZoom={
+                                    11
+                                }
                                 spiderfyOnMaxZoom
-                                showCoverageOnHover={false}
-                                iconCreateFunction={createClusterIcon}
+                                showCoverageOnHover={
+                                    false
+                                }
+                                iconCreateFunction={
+                                    createClusterIcon
+                                }
                             >
-                                {filteredPoints.map((point: any) => {
-                                    const isHelipuerto =
-                                        String(
-                                            point.tipo || ''
-                                        ).toLowerCase() === 'helipuerto';
+                                {filteredPoints.map(
+                                    (
+                                        point: any
+                                    ) => {
+                                        const isHelipuerto =
+                                            String(
+                                                point.tipo ||
+                                                    ''
+                                            ).toLowerCase() ===
+                                            'helipuerto';
 
-                                    const isSelected =
-                                        selectedSlug &&
-                                        point.slug === selectedSlug;
+                                        const isSelected =
+                                            selectedSlug &&
+                                            point.slug ===
+                                                selectedSlug;
 
-                                    const icon = isSelected
-                                        ? selectedIcon
-                                        : isHelipuerto
-                                            ? helipuertoIcon
-                                            : aerodromoIcon;
+                                        const icon =
+                                            isSelected
+                                                ? selectedIcon
+                                                : isHelipuerto
+                                                  ? helipuertoIcon
+                                                  : aerodromoIcon;
 
-                                    return (
-                                        <Marker
-                                            key={point.id}
-                                            position={[
-                                                Number(point.latitud),
-                                                Number(point.longitud),
-                                            ]}
-                                            icon={icon}
-                                        >
-                                            <Popup>
-                                                <div className="min-w-[215px]">
-                                                    <div className="text-[10px] font-medium uppercase tracking-[0.14em] text-slate-500">
-                                                        {point.tipo ||
-                                                            'Instalación'}
-                                                    </div>
+                                        return (
+                                            <Marker
+                                                key={
+                                                    point.id
+                                                }
+                                                position={[
+                                                    Number(
+                                                        point.latitud
+                                                    ),
+                                                    Number(
+                                                        point.longitud
+                                                    ),
+                                                ]}
+                                                icon={
+                                                    icon
+                                                }
+                                            >
+                                                <Popup>
+                                                    <div className="min-w-[205px] max-w-[250px]">
+                                                        <div className="text-[10px] font-medium uppercase tracking-[0.14em] text-slate-500">
+                                                            {facilityType(
+                                                                point.tipo
+                                                            )}
+                                                        </div>
 
-                                                    <div className="mt-1 text-base font-semibold leading-snug text-slate-900">
-                                                        {point.nombre}
-                                                    </div>
-
-                                                    <div className="mt-2 flex flex-wrap gap-1.5">
-                                                        {point.designador_oaci && (
-                                                            <CodeBadge>
-                                                                OACI{' '}
-                                                                {
-                                                                    point.designador_oaci
-                                                                }
-                                                            </CodeBadge>
-                                                        )}
-
-                                                        {point.designador_iata && (
-                                                            <CodeBadge>
-                                                                IATA{' '}
-                                                                {
-                                                                    point.designador_iata
-                                                                }
-                                                            </CodeBadge>
-                                                        )}
-
-                                                        {point.designador_local && (
-                                                            <CodeBadge>
-                                                                Local{' '}
-                                                                {
-                                                                    point.designador_local
-                                                                }
-                                                            </CodeBadge>
-                                                        )}
-                                                    </div>
-
-                                                    {point.provincia && (
-                                                        <div className="mt-3 text-xs text-slate-500">
+                                                        <div className="mt-1 text-base font-semibold leading-snug text-slate-900">
                                                             {
-                                                                point.provincia
+                                                                point.nombre
                                                             }
                                                         </div>
-                                                    )}
 
-                                                    <Link
-                                                        href={`/aerodromos/${point.slug}`}
-                                                        className="mt-3 inline-flex text-sm font-medium text-blue-600 hover:underline"
-                                                    >
-                                                        Ver ficha completa →
-                                                    </Link>
-                                                </div>
-                                            </Popup>
-                                        </Marker>
-                                    );
-                                })}
+                                                        <div className="mt-2 flex flex-wrap gap-1.5">
+                                                            {point.designador_oaci && (
+                                                                <CodeBadge>
+                                                                    ICAO{' '}
+                                                                    {
+                                                                        point.designador_oaci
+                                                                    }
+                                                                </CodeBadge>
+                                                            )}
+
+                                                            {point.designador_iata && (
+                                                                <CodeBadge>
+                                                                    IATA{' '}
+                                                                    {
+                                                                        point.designador_iata
+                                                                    }
+                                                                </CodeBadge>
+                                                            )}
+
+                                                            {point.designador_local && (
+                                                                <CodeBadge>
+                                                                    {
+                                                                        t(
+                                                                            'map.localCodeShort'
+                                                                        )
+                                                                    }{' '}
+                                                                    {
+                                                                        point.designador_local
+                                                                    }
+                                                                </CodeBadge>
+                                                            )}
+                                                        </div>
+
+                                                        {point.provincia && (
+                                                            <div className="mt-3 text-xs text-slate-500">
+                                                                {
+                                                                    point.provincia
+                                                                }
+                                                            </div>
+                                                        )}
+
+                                                        <Link
+                                                            href={`/aerodromos/${point.slug}`}
+                                                            className="mt-3 inline-flex text-sm font-medium text-blue-600 hover:underline"
+                                                        >
+                                                            {t(
+                                                                'map.viewFullDetails'
+                                                            )}{' '}
+                                                            →
+                                                        </Link>
+                                                    </div>
+                                                </Popup>
+                                            </Marker>
+                                        );
+                                    }
+                                )}
                             </MarkerClusterGroup>
                         </MapContainer>
 
                         <div className="pointer-events-none absolute bottom-5 left-5 z-[500] hidden rounded-xl border border-white/15 bg-slate-950/85 px-4 py-3 text-white shadow-xl backdrop-blur-md md:block">
                             <div className="text-[10px] uppercase tracking-[0.16em] text-slate-300">
-                                Vista actual
+                                {t(
+                                    'map.currentView'
+                                )}
                             </div>
 
                             <div className="mt-1 text-xl font-semibold">
-                                {filteredPoints.length}
+                                {
+                                    filteredPoints.length
+                                }
                             </div>
 
                             <div className="text-xs text-slate-300">
-                                registros
+                                {t(
+                                    'map.records'
+                                )}
                             </div>
                         </div>
                     </div>
                 </div>
 
-                {filteredPoints.length === 0 && (
+                {filteredPoints.length ===
+                    0 && (
                     <div className="mt-5 rounded-xl border border-border bg-surface p-5 text-sm text-muted">
-                        No hay instalaciones que coincidan con los filtros
-                        seleccionados.
+                        {t(
+                            'map.noMatches'
+                        )}
                     </div>
                 )}
 
                 <div className="mt-5 flex flex-col gap-2 text-xs leading-5 text-muted md:flex-row md:items-center md:justify-between">
                     <span>
-                        Datos: ANAC / Secretaría de Transporte · Septiembre 2026
+                        {t(
+                            'map.dataSource'
+                        )}
                     </span>
 
                     <span>
-                        La representación cartográfica es orientativa.
+                        {t(
+                            'map.mapDisclaimer'
+                        )}
                     </span>
                 </div>
             </div>
@@ -587,12 +852,12 @@ function Stat({
     value: number;
 }) {
     return (
-        <div className="rounded-xl border border-border bg-surface px-4 py-3">
-            <div className="text-xs uppercase tracking-[0.12em] text-muted">
+        <div className="min-w-0 rounded-xl border border-border bg-surface px-3 py-3 sm:px-4">
+            <div className="truncate text-[9px] uppercase tracking-[0.08em] text-muted sm:text-xs sm:tracking-[0.12em]">
                 {label}
             </div>
 
-            <div className="mt-1 text-2xl font-semibold">
+            <div className="mt-1 text-xl font-semibold sm:text-2xl">
                 {value}
             </div>
         </div>
@@ -610,7 +875,7 @@ function Legend({
         <div className="flex items-center gap-2">
             <span
                 className={[
-                    'inline-block h-2.5 w-2.5',
+                    'inline-block h-2.5 w-2.5 shrink-0',
                     shape === 'circle'
                         ? 'rounded-full bg-blue-600'
                         : 'rotate-45 rounded-[2px] bg-teal-500',

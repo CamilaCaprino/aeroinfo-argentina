@@ -1,9 +1,11 @@
 import { Head, Link } from '@inertiajs/react';
 import type { ReactNode } from 'react';
+import { useTranslation } from 'react-i18next';
 import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet';
 import L from 'leaflet';
 
 import AppLayout from '../../Layouts/AppLayout';
+import i18n from '../../i18n';
 
 const detailMarkerIcon = L.divIcon({
     className: '',
@@ -34,11 +36,13 @@ export default function Show({
     meteorologia,
     notams,
 }: ShowProps) {
+    const { t } = useTranslation();
+
     const primaryCode =
         a.designador_oaci ||
         a.designador_local ||
         a.designador_iata ||
-        'SIN CÓDIGO PUBLICADO';
+        t('show.noPublishedCode');
 
     const coordinatesAvailable =
         a.latitud !== null &&
@@ -50,13 +54,13 @@ export default function Show({
         <AppLayout>
             <Head title={a.nombre} />
 
-            <div className="mx-auto max-w-[86rem] px-5 pb-12 pt-10 sm:px-6 md:pt-12 lg:px-8">
+            <div className="mx-auto max-w-[86rem] px-4 pb-10 pt-7 sm:px-6 md:pb-12 md:pt-10 lg:px-8">
                 <div className="mb-6">
                     <Link
                         href="/aerodromos"
                         className="inline-flex items-center gap-2 text-sm font-medium text-muted transition hover:text-foreground"
                     >
-                        ← Volver al listado
+                        ← {t('common.backToList')}
                     </Link>
                 </div>
 
@@ -83,7 +87,7 @@ export default function Show({
                                 {[a.localidad, a.provincia]
                                     .filter(Boolean)
                                     .join(' · ') ||
-                                    'Ubicación no informada'}
+                                    t('show.locationNotReported')}
                             </p>
                         </div>
 
@@ -93,7 +97,7 @@ export default function Show({
                                     href={`/mapa?lat=${a.latitud}&lon=${a.longitud}&zoom=11&selected=${a.slug}`}
                                     className="inline-flex items-center justify-center rounded-lg border border-border bg-surface px-4 py-2.5 text-sm font-medium transition hover:bg-background"
                                 >
-                                    Ver mapa nacional
+                                    {t('show.viewNationalMap')}
                                 </Link>
                             </div>
                         )}
@@ -103,48 +107,48 @@ export default function Show({
                 <div className="mt-8 grid gap-6 xl:grid-cols-[1.35fr_0.65fr]">
                     <div className="space-y-6">
                         <Section
-                            eyebrow="Información principal"
-                            title="Identificación"
+                            eyebrow={t('aerodrome.mainInformation')}
+                            title={t('aerodrome.identification')}
                         >
                             <div className="grid gap-x-8 md:grid-cols-2">
                                 <Field
-                                    label="Código OACI"
+                                    label={t('aerodrome.icaoCode')}
                                     value={a.designador_oaci}
                                     mono
                                 />
 
                                 <Field
-                                    label="Código IATA"
+                                    label={t('aerodrome.iataCode')}
                                     value={a.designador_iata}
                                     mono
                                 />
 
                                 <Field
-                                    label="Código local"
+                                    label={t('aerodrome.localCode')}
                                     value={a.designador_local}
                                     mono
                                 />
 
                                 <Field
-                                    label="Tipo"
+                                    label={t('aerodrome.type')}
                                     value={a.tipo}
                                 />
 
                                 <Field
-                                    label="Uso / tráfico"
+                                    label={t('aerodrome.useTraffic')}
                                     value={a.uso}
                                 />
 
                                 <Field
-                                    label="Provincia"
+                                    label={t('aerodrome.province')}
                                     value={a.provincia}
                                 />
                             </div>
                         </Section>
 
                         <Section
-                            eyebrow="Meteorología"
-                            title="Condiciones y pronóstico"
+                            eyebrow={t('weather.section')}
+                            title={t('weather.conditionsForecast')}
                         >
                             <MeteorologiaPanel
                                 meteorologia={meteorologia}
@@ -152,15 +156,15 @@ export default function Show({
                         </Section>
 
                         <Section
-                            eyebrow="Información operacional"
-                            title="NOTAM activos"
+                            eyebrow={t('notam.section')}
+                            title={t('notam.title')}
                         >
                             <NotamPanel notams={notams} />
                         </Section>
 
                         <Section
-                            eyebrow="Infraestructura"
-                            title="Pistas"
+                            eyebrow={t('aerodrome.infrastructure')}
+                            title={t('aerodrome.runways')}
                         >
                             {a.pistas?.length ? (
                                 <div className="divide-y divide-border">
@@ -172,35 +176,35 @@ export default function Show({
                                             >
                                                 <div>
                                                     <div className="text-xs uppercase tracking-[0.1em] text-muted">
-                                                        Designación
+                                                        {t('aerodrome.runwayDesignation')}
                                                     </div>
 
                                                     <div className="mt-1 font-medium">
                                                         {pista.designacion ||
-                                                            'No informada'}
+                                                            i18n.t('common.notReported')}
                                                     </div>
                                                 </div>
 
                                                 <div>
                                                     <div className="text-xs uppercase tracking-[0.1em] text-muted">
-                                                        Superficie
+                                                        {t('aerodrome.surface')}
                                                     </div>
 
                                                     <div className="mt-1 font-medium">
                                                         {pista.superficie ||
-                                                            'No informada'}
+                                                            i18n.t('common.notReported')}
                                                     </div>
                                                 </div>
 
                                                 <div>
                                                     <div className="text-xs uppercase tracking-[0.1em] text-muted">
-                                                        Longitud
+                                                        {t('aerodrome.length')}
                                                     </div>
 
                                                     <div className="mt-1 font-medium">
                                                         {pista.largo_m
                                                             ? `${pista.largo_m} m`
-                                                            : 'No informada'}
+                                                            : i18n.t('common.notReported')}
                                                     </div>
                                                 </div>
                                             </div>
@@ -209,16 +213,14 @@ export default function Show({
                                 </div>
                             ) : (
                                 <EmptyState>
-                                    No hay información de pistas
-                                    validada asociada a este
-                                    registro.
+                                    {t('show.noRunwayData')}
                                 </EmptyState>
                             )}
                         </Section>
 
                         <Section
-                            eyebrow="Trazabilidad"
-                            title="Fuentes"
+                            eyebrow={t('show.traceability')}
+                            title={t('nav.sources')}
                         >
                             {a.referencias?.length ? (
                                 <div className="space-y-4">
@@ -235,13 +237,13 @@ export default function Show({
                                                                 .fuente
                                                                 ?.nombre ||
                                                                 referencia.documento ||
-                                                                'Fuente sin identificar'}
+                                                                i18n.t('show.unidentifiedSource')}
                                                         </div>
 
                                                         <div className="mt-1 text-sm leading-6 text-muted">
-                                                            Consultado:{' '}
+                                                            {t('show.consulted')}: {' '}
                                                             {referencia.fecha_consulta ||
-                                                                'No informado'}
+                                                                i18n.t('common.notReported')}
                                                         </div>
                                                     </div>
 
@@ -263,7 +265,7 @@ export default function Show({
                                                         rel="noreferrer"
                                                         className="mt-3 inline-flex text-sm font-medium text-primary hover:underline"
                                                     >
-                                                        Abrir fuente →
+                                                        {t('show.openSource')} →
                                                     </a>
                                                 )}
                                             </div>
@@ -272,8 +274,7 @@ export default function Show({
                                 </div>
                             ) : (
                                 <EmptyState>
-                                    No hay referencias asociadas a
-                                    este registro.
+                                    {t('show.noReferences')}
                                 </EmptyState>
                             )}
                         </Section>
@@ -281,23 +282,23 @@ export default function Show({
 
                     <aside className="space-y-6">
                         <Section
-                            eyebrow="Georreferencia"
-                            title="Ubicación"
+                            eyebrow={t('show.georeference')}
+                            title={t('common.location')}
                         >
                             <Field
-                                label="Latitud"
+                                label={t('show.latitude')}
                                 value={a.latitud}
                                 mono
                             />
 
                             <Field
-                                label="Longitud"
+                                label={t('show.longitude')}
                                 value={a.longitud}
                                 mono
                             />
 
                             <Field
-                                label="Elevación"
+                                label={t('show.elevation')}
                                 value={
                                     a.elevacion_m !== null &&
                                     a.elevacion_m !== undefined
@@ -307,7 +308,7 @@ export default function Show({
                             />
 
                             <Field
-                                label="Estado de validación"
+                                label={t('show.validationStatus')}
                                 value={a.estado_validacion}
                             />
 
@@ -362,7 +363,7 @@ export default function Show({
                                                                 {a.designador_oaci ||
                                                                     a.designador_local ||
                                                                     a.designador_iata ||
-                                                                    'Sin código publicado'}
+                                                                    i18n.t('show.noPublishedCode')}
                                                             </div>
                                                         </div>
                                                     </Popup>
@@ -378,14 +379,14 @@ export default function Show({
                                             rel="noreferrer"
                                             className="text-sm font-medium text-primary hover:underline"
                                         >
-                                            Abrir en OpenStreetMap →
+                                            {t('show.openOpenStreetMap')} →
                                         </a>
 
                                         <Link
                                             href={`/mapa?lat=${a.latitud}&lon=${a.longitud}&zoom=11&selected=${a.slug}`}
                                             className="text-sm font-medium text-primary hover:underline"
                                         >
-                                            Ver mapa nacional →
+                                            {t('show.viewNationalMap')} →
                                         </Link>
                                     </div>
                                 </>
@@ -394,15 +395,11 @@ export default function Show({
 
                         <div className="rounded-2xl border border-border bg-surface p-5">
                             <div className="text-xs font-medium uppercase tracking-[0.14em] text-primary">
-                                Aviso
+                                {t('show.notice')}
                             </div>
 
                             <p className="mt-3 text-sm leading-6 text-muted">
-                                Esta ficha organiza información
-                                aeronáutica pública para consulta.
-                                No sustituye publicaciones
-                                aeronáuticas aplicables ni
-                                información previa al vuelo.
+                                {t('show.noticeText')}
                             </p>
                         </div>
                     </aside>
@@ -430,7 +427,7 @@ function NotamPanel({
     if (!notams) {
         return (
             <EmptyState>
-                No hay información NOTAM disponible.
+                {i18n.t('show.notam.noData')}
             </EmptyState>
         );
     }
@@ -438,7 +435,7 @@ function NotamPanel({
     if (notams.status === 'no_indicator') {
         return (
             <EmptyState>
-                Este registro no tiene un indicador local asociado para consultar NOTAM en AIS ANAC.
+                {i18n.t('show.notam.noIndicator')}
             </EmptyState>
         );
     }
@@ -446,7 +443,7 @@ function NotamPanel({
     if (notams.status === 'disabled') {
         return (
             <EmptyState>
-                La consulta NOTAM está deshabilitada temporalmente.
+                {i18n.t('show.notam.disabled')}
             </EmptyState>
         );
     }
@@ -454,7 +451,7 @@ function NotamPanel({
     if (notams.status === 'error') {
         return (
             <EmptyState>
-                No fue posible consultar los NOTAM de AIS ANAC en este momento.
+                {i18n.t('show.notam.error')}
             </EmptyState>
         );
     }
@@ -467,7 +464,7 @@ function NotamPanel({
     if (notams.status !== 'ok') {
         return (
             <EmptyState>
-                No hay información NOTAM disponible para este aeródromo.
+                {i18n.t('show.notam.noAerodromeData')}
             </EmptyState>
         );
     }
@@ -478,16 +475,16 @@ function NotamPanel({
                 <div>
                     <div className="text-sm font-semibold">
                         {rows.length
-                            ? `${rows.length} NOTAM activo${rows.length === 1 ? '' : 's'}`
-                            : 'Sin NOTAM activos'}
+                            ? i18n.t('notam.active', { count: rows.length })
+                            : i18n.t('show.notam.noneActive')}
                     </div>
 
                     <p className="mt-1 max-w-3xl text-sm leading-6 text-muted">
-                        Avisos publicados en AIS ANAC para el indicador{' '}
+                        {i18n.t('show.notam.descriptionStart')}{' '}
                         <span className="font-mono font-medium text-foreground">
                             {notams.indicator || '—'}
                         </span>
-                        . Se muestra primero la versión en español cuando está disponible y se conserva el texto original.
+                        . {i18n.t('show.notam.descriptionEnd')}
                     </p>
                 </div>
 
@@ -512,13 +509,13 @@ function NotamPanel({
                 </div>
             ) : (
                 <EmptyState>
-                    AIS ANAC no informa NOTAM activos para este indicador en este momento.
+                    {i18n.t('show.notam.noneForIndicator')}
                 </EmptyState>
             )}
 
             <div className="flex flex-col gap-2 border-t border-border pt-4 text-xs leading-5 text-muted sm:flex-row sm:items-center sm:justify-between">
                 <span>
-                    Fuente: AIS ANAC · Información de referencia. No reemplaza el PIB ni la información previa al vuelo obtenida por los canales oficiales.
+                    {i18n.t('show.notam.referenceDisclaimer')}
                 </span>
 
                 <a
@@ -527,7 +524,7 @@ function NotamPanel({
                     rel="noreferrer"
                     className="shrink-0 font-medium text-primary hover:underline"
                 >
-                    Abrir AIS ANAC →
+                    {i18n.t('show.notam.openAnac')} →
                 </a>
             </div>
         </div>
@@ -576,14 +573,14 @@ function NotamCard({
                 <div className="text-xs text-muted">
                     {notam.location_name ||
                         notam.indicator ||
-                        'Lugar no informado'}
+                        i18n.t('show.notam.locationNotReported')}
                 </div>
             </div>
 
             <div className="mt-4 grid gap-3 sm:grid-cols-2">
                 <div className="rounded-lg border border-border bg-surface/40 px-3 py-2.5">
                     <div className="text-[10px] font-medium uppercase tracking-[0.1em] text-muted">
-                        Desde
+                        {i18n.t('common.from')}
                     </div>
 
                     <div className="mt-1 text-sm font-medium">
@@ -595,12 +592,12 @@ function NotamCard({
 
                 <div className="rounded-lg border border-border bg-surface/40 px-3 py-2.5">
                     <div className="text-[10px] font-medium uppercase tracking-[0.1em] text-muted">
-                        Hasta
+                        {i18n.t('common.until')}
                     </div>
 
                     <div className="mt-1 text-sm font-medium">
                         {notam.permanent
-                            ? 'Permanente'
+                            ? i18n.t('common.permanent')
                             : formatNotamTime(
                                   notam.ends_at
                               )}
@@ -610,13 +607,13 @@ function NotamCard({
 
             <div className="mt-4 rounded-xl border border-border bg-background/65 p-4">
                 <div className="text-[10px] font-medium uppercase tracking-[0.12em] text-muted">
-                    Información
+                    {i18n.t('notam.information')}
                 </div>
 
                 <p className="mt-2 text-sm font-medium leading-6 text-foreground">
                     {spanish ||
                         original ||
-                        'Texto no informado'}
+                        i18n.t('show.notam.textNotReported')}
                 </p>
             </div>
 
@@ -626,7 +623,7 @@ function NotamCard({
                     spanish.trim() && (
                     <details className="mt-3 rounded-lg border border-border bg-background/35">
                         <summary className="cursor-pointer px-3 py-2.5 text-xs font-medium text-primary">
-                            Ver texto original
+                            {i18n.t('notam.original')}
                         </summary>
 
                         <div className="border-t border-border px-3 py-3 font-mono text-xs leading-5 text-muted">
@@ -645,17 +642,17 @@ function formatNotamCategory(
         string,
         string
     > = {
-        runway: 'Pista',
-        taxiway: 'Taxiway',
+        runway: i18n.t('notam.runway'),
+        taxiway: i18n.t('notam.taxiway'),
         approach_aid:
-            'Ayuda de aproximación',
+            i18n.t('notam.approachAid'),
         navigation_aid:
-            'Radioayuda',
-        apron: 'Plataforma',
-        obstacle: 'Obstáculo',
+            i18n.t('notam.navigationAid'),
+        apron: i18n.t('notam.apron'),
+        obstacle: i18n.t('notam.obstacle'),
         procedure:
-            'Procedimiento',
-        other: 'Otro',
+            i18n.t('notam.procedure'),
+        other: i18n.t('notam.other'),
     };
 
     return (
@@ -663,7 +660,7 @@ function formatNotamCategory(
             String(
                 category || 'other'
             ).toLowerCase()
-        ] || 'Otro'
+        ] || i18n.t('notam.other')
     );
 }
 
@@ -708,7 +705,7 @@ function formatNotamTime(
     value?: string
 ) {
     if (!value) {
-        return 'No informado';
+        return i18n.t('common.notReported');
     }
 
     return formatZuluTime(
@@ -729,7 +726,7 @@ function MeteorologiaPanel({
     if (!meteorologia) {
         return (
             <EmptyState>
-                No hay información meteorológica disponible.
+                {i18n.t('show.weather.noData')}
             </EmptyState>
         );
     }
@@ -773,19 +770,15 @@ function MeteorologiaPanel({
             <div>
                 <div className="mb-4">
                     <div className="text-[11px] font-medium uppercase tracking-[0.14em] text-primary">
-                        Información meteorológica aeronáutica
+                        {i18n.t('show.weather.aeronauticalInformation')}
                     </div>
 
                     <h3 className="mt-1 text-lg font-semibold">
-                        METAR / SPECI y TAF
+                        {i18n.t('show.weather.metarTafTitle')}
                     </h3>
 
                     <p className="mt-1 max-w-3xl text-sm leading-6 text-muted">
-                        Productos meteorológicos aeronáuticos
-                        asociados al designador OACI del
-                        aeródromo. Se conserva siempre el
-                        mensaje original junto con una lectura
-                        estructurada.
+                        {i18n.t('show.weather.metarTafDescription')}
                     </p>
                 </div>
 
@@ -802,17 +795,15 @@ function MeteorologiaPanel({
             <div className="border-t border-border pt-7">
                 <div className="mb-5">
                     <div className="text-[11px] font-medium uppercase tracking-[0.14em] text-primary">
-                        Información complementaria
+                        {i18n.t('show.weather.complementaryInformation')}
                     </div>
 
                     <h3 className="mt-1 text-lg font-semibold">
-                        Observación SMN y tendencia ECMWF
+                        {i18n.t('show.weather.smnEcmwfTitle')}
                     </h3>
 
                     <p className="mt-1 max-w-3xl text-sm leading-6 text-muted">
-                        Datos complementarios para ampliar el
-                        contexto meteorológico. No reemplazan
-                        los productos aeronáuticos aplicables.
+                        {i18n.t('show.weather.smnEcmwfDescription')}
                     </p>
                 </div>
 
@@ -820,13 +811,11 @@ function MeteorologiaPanel({
                     <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
                         <div>
                             <h4 className="text-base font-semibold">
-                                Observación SMN
+                                {i18n.t('show.weather.smnObservation')}
                             </h4>
 
                             <p className="mt-1 max-w-2xl text-sm leading-6 text-muted">
-                                Condiciones observadas mediante
-                                estaciones del Servicio
-                                Meteorológico Nacional.
+                                {i18n.t('show.weather.smnDescription')}
                             </p>
                         </div>
 
@@ -850,15 +839,11 @@ function MeteorologiaPanel({
                     ) : observacion?.status ===
                       'error' ? (
                         <EmptyState>
-                            No fue posible consultar las
-                            observaciones del SMN en este
-                            momento.
+                            {i18n.t('show.weather.smnError')}
                         </EmptyState>
                     ) : (
                         <EmptyState>
-                            No hay una observación SMN
-                            representativa disponible para
-                            este aeródromo.
+                            {i18n.t('show.weather.smnUnavailable')}
                         </EmptyState>
                     )}
                 </div>
@@ -867,13 +852,11 @@ function MeteorologiaPanel({
                     <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
                         <div>
                             <h4 className="text-base font-semibold">
-                                Pronóstico horario ECMWF
+                                {i18n.t('show.weather.ecmwfHourly')}
                             </h4>
 
                             <p className="mt-1 max-w-2xl text-sm leading-6 text-muted">
-                                Pronóstico numérico calculado
-                                para las coordenadas específicas
-                                del aeródromo.
+                                {i18n.t('show.weather.ecmwfDescription')}
                             </p>
                         </div>
 
@@ -893,27 +876,18 @@ function MeteorologiaPanel({
                     ) : pronostico?.status ===
                       'error' ? (
                         <EmptyState>
-                            No fue posible consultar el
-                            pronóstico meteorológico en este
-                            momento.
+                            {i18n.t('show.weather.forecastError')}
                         </EmptyState>
                     ) : (
                         <EmptyState>
-                            No hay pronóstico meteorológico
-                            disponible para esta ubicación.
+                            {i18n.t('show.weather.forecastUnavailable')}
                         </EmptyState>
                     )}
                 </div>
             </div>
 
             <div className="border-t border-border pt-4 text-xs leading-5 text-muted">
-                AeroInfo organiza estos datos para facilitar
-                su consulta. Verificá siempre METAR/SPECI,
-                TAF, NOTAM, SIGMET y demás información
-                aeronáutica aplicable mediante las fuentes y
-                servicios oficiales correspondientes antes
-                de la operación. Esta vista no constituye un
-                PIB ni un briefing oficial.
+                {i18n.t('show.weather.disclaimer')}
             </div>
         </div>
     );
@@ -930,13 +904,11 @@ function MetarPanel({
         return (
             <AviationProductShell
                 title="METAR / SPECI"
-                description="Observación meteorológica aeronáutica."
+                description={i18n.t('show.weather.metarDescription')}
                 status="no_icao"
             >
                 <EmptyState>
-                    Este registro no tiene designador OACI,
-                    por lo que no es posible consultar
-                    METAR/SPECI por código de aeródromo.
+                    {i18n.t('show.weather.metarNoIcao')}
                 </EmptyState>
             </AviationProductShell>
         );
@@ -946,12 +918,11 @@ function MetarPanel({
         return (
             <AviationProductShell
                 title="METAR / SPECI"
-                description="Observación meteorológica aeronáutica."
+                description={i18n.t('show.weather.metarDescription')}
                 status="error"
             >
                 <EmptyState>
-                    No fue posible consultar METAR/SPECI en
-                    este momento.
+                    {i18n.t('show.weather.metarError')}
                 </EmptyState>
             </AviationProductShell>
         );
@@ -964,12 +935,11 @@ function MetarPanel({
         return (
             <AviationProductShell
                 title="METAR / SPECI"
-                description="Observación meteorológica aeronáutica."
+                description={i18n.t('show.weather.metarDescription')}
                 status={metar?.status}
             >
                 <EmptyState>
-                    No hay un METAR/SPECI disponible para
-                    este aeródromo.
+                    {i18n.t('show.weather.metarUnavailable')}
                 </EmptyState>
             </AviationProductShell>
         );
@@ -980,7 +950,7 @@ function MetarPanel({
     return (
         <AviationProductShell
             title={`${data.type || 'METAR'} ${data.icao || ''}`.trim()}
-            description="Último reporte meteorológico aeronáutico disponible."
+            description={i18n.t('show.weather.metarLatest')}
             status={metar.status}
             stale={stale}
             right={
@@ -990,13 +960,13 @@ function MetarPanel({
             }
         >
             <RawAviationMessage
-                label="Mensaje original"
+                label={i18n.t('show.weather.originalMessage')}
                 value={data.raw}
             />
 
             <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
                 <WeatherMetric
-                    label="Viento"
+                    label={i18n.t('weather.wind')}
                     value={formatAviationWind(
                         data.wind
                     )}
@@ -1004,7 +974,7 @@ function MetarPanel({
                 />
 
                 <WeatherMetric
-                    label="Visibilidad"
+                    label={i18n.t('weather.visibility')}
                     value={formatAviationVisibility(
                         data.visibility
                     )}
@@ -1020,7 +990,7 @@ function MetarPanel({
                 />
 
                 <WeatherMetric
-                    label="Temperatura"
+                    label={i18n.t('weather.temperature')}
                     value={formatUnit(
                         data.temperature_c,
                         '°C',
@@ -1029,7 +999,7 @@ function MetarPanel({
                 />
 
                 <WeatherMetric
-                    label="Punto de rocío"
+                    label={i18n.t('weather.dewpoint')}
                     value={formatUnit(
                         data.dewpoint_c,
                         '°C',
@@ -1038,27 +1008,27 @@ function MetarPanel({
                 />
 
                 <WeatherMetric
-                    label="Nubosidad"
+                    label={i18n.t('weather.cloud')}
                     value={
                         data.clouds?.length
                             ? formatCloudLayers(
                                   data.clouds
                               )
                             : data.cloud_cover ||
-                              'Sin capas informadas'
+                              i18n.t('show.weather.noCloudLayers')
                     }
                 />
 
                 <WeatherMetric
-                    label="Categoría"
+                    label={i18n.t('show.weather.category')}
                     value={
                         data.flight_category ||
-                        'No informada'
+                        i18n.t('common.notReported')
                     }
                 />
 
                 <WeatherMetric
-                    label="Observado"
+                    label={i18n.t('weather.observed')}
                     value={formatZuluTime(
                         data.observed_at
                     )}
@@ -1067,20 +1037,20 @@ function MetarPanel({
 
             <div className="mt-4 flex flex-wrap gap-x-4 gap-y-1 text-xs text-muted">
                 <span>
-                    Fuente: {data.source || 'AviationWeather.gov'}
+                    {i18n.t('common.source')}: {data.source || 'AviationWeather.gov'}
                 </span>
 
                 <span>·</span>
 
                 <span>
-                    Recibido: {formatZuluTime(data.received_at)}
+                    {i18n.t('show.weather.received')}: {formatZuluTime(data.received_at)}
                 </span>
 
                 {stale && (
                     <>
                         <span>·</span>
                         <span className="font-medium text-amber-500">
-                            Reporte con más de 2 horas
+                            {i18n.t('show.weather.reportOlderThanTwoHours')}
                         </span>
                     </>
                 )}
@@ -1098,13 +1068,11 @@ function TafPanel({
         return (
             <AviationProductShell
                 title="TAF"
-                description="Pronóstico meteorológico aeronáutico."
+                description={i18n.t('show.weather.tafDescription')}
                 status="no_icao"
             >
                 <EmptyState>
-                    Este registro no tiene designador OACI,
-                    por lo que no es posible consultar TAF
-                    por código de aeródromo.
+                    {i18n.t('show.weather.tafNoIcao')}
                 </EmptyState>
             </AviationProductShell>
         );
@@ -1114,12 +1082,11 @@ function TafPanel({
         return (
             <AviationProductShell
                 title="TAF"
-                description="Pronóstico meteorológico aeronáutico."
+                description={i18n.t('show.weather.tafDescription')}
                 status="error"
             >
                 <EmptyState>
-                    No fue posible consultar el TAF en este
-                    momento.
+                    {i18n.t('show.weather.tafError')}
                 </EmptyState>
             </AviationProductShell>
         );
@@ -1132,12 +1099,11 @@ function TafPanel({
         return (
             <AviationProductShell
                 title="TAF"
-                description="Pronóstico meteorológico aeronáutico."
+                description={i18n.t('show.weather.tafDescription')}
                 status={taf?.status}
             >
                 <EmptyState>
-                    No hay un TAF disponible para este
-                    aeródromo.
+                    {i18n.t('show.weather.tafUnavailable')}
                 </EmptyState>
             </AviationProductShell>
         );
@@ -1148,31 +1114,31 @@ function TafPanel({
     return (
         <AviationProductShell
             title={`TAF ${data.icao || ''}`.trim()}
-            description="Pronóstico de aeródromo y cambios previstos durante su período de validez."
+            description={i18n.t('show.weather.tafLatest')}
             status={taf.status}
         >
             <RawAviationMessage
-                label="Mensaje original"
+                label={i18n.t('show.weather.originalMessage')}
                 value={data.raw}
             />
 
             <div className="mt-4 grid gap-3 sm:grid-cols-3">
                 <WeatherMetric
-                    label="Emitido"
+                    label={i18n.t('show.weather.issued')}
                     value={formatZuluTime(
                         data.issued_at
                     )}
                 />
 
                 <WeatherMetric
-                    label="Válido desde"
+                    label={i18n.t('show.weather.validFrom')}
                     value={formatZuluTime(
                         data.valid_from
                     )}
                 />
 
                 <WeatherMetric
-                    label="Válido hasta"
+                    label={i18n.t('show.weather.validUntil')}
                     value={formatZuluTime(
                         data.valid_to
                     )}
@@ -1183,7 +1149,7 @@ function TafPanel({
             data.segments.length ? (
                 <div className="mt-5 space-y-3">
                     <div className="text-[11px] font-medium uppercase tracking-[0.12em] text-muted">
-                        Evolución prevista
+                        {i18n.t('show.weather.expectedEvolution')}
                     </div>
 
                     {data.segments.map(
@@ -1202,14 +1168,13 @@ function TafPanel({
             ) : (
                 <div className="mt-4">
                     <EmptyState>
-                        El TAF no contiene segmentos
-                        decodificados disponibles.
+                        {i18n.t('show.weather.noDecodedSegments')}
                     </EmptyState>
                 </div>
             )}
 
             <div className="mt-4 text-xs text-muted">
-                Fuente: {data.source || 'AviationWeather.gov'}
+                {i18n.t('common.source')}: {data.source || 'AviationWeather.gov'}
             </div>
         </AviationProductShell>
     );
@@ -1259,7 +1224,7 @@ function TafSegment({
 
                     {hazardous && (
                         <span className="text-xs font-medium text-amber-500">
-                            Condición a revisar
+                            {i18n.t('show.weather.conditionToReview')}
                         </span>
                     )}
                 </div>
@@ -1274,7 +1239,7 @@ function TafSegment({
 
             {segment.became_at && (
                 <div className="mt-2 text-xs text-muted">
-                    Cambio previsto hacia{' '}
+                    {i18n.t('show.weather.changeExpectedToward')}{' '}
                     <span className="font-medium text-foreground">
                         {formatZuluTime(
                             segment.became_at
@@ -1285,34 +1250,34 @@ function TafSegment({
 
             <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
                 <WeatherMetric
-                    label="Viento"
+                    label={i18n.t('weather.wind')}
                     value={formatAviationWind(
                         segment.wind
                     )}
                 />
 
                 <WeatherMetric
-                    label="Visibilidad"
+                    label={i18n.t('weather.visibility')}
                     value={formatAviationVisibility(
                         segment.visibility
                     )}
                 />
 
                 <WeatherMetric
-                    label="Fenómeno"
+                    label={i18n.t('show.weather.phenomenon')}
                     value={formatAviationWeather(
                         segment.weather
                     )}
                 />
 
                 <WeatherMetric
-                    label="Nubes"
+                    label={i18n.t('show.weather.clouds')}
                     value={
                         segment.clouds?.length
                             ? formatCloudLayers(
                                   segment.clouds
                               )
-                            : 'Sin capas informadas'
+                            : i18n.t('show.weather.noCloudLayers')
                     }
                 />
             </div>
@@ -1329,10 +1294,10 @@ function TafSegment({
                                 className="rounded-lg border border-border bg-surface px-3 py-2 text-xs"
                             >
                                 {temp.type === 'MAX'
-                                    ? 'Máx.'
+                                    ? i18n.t('show.weather.max')
                                     : temp.type === 'MIN'
-                                      ? 'Mín.'
-                                      : 'Temp.'}{' '}
+                                      ? i18n.t('show.weather.min')
+                                      : i18n.t('show.weather.temp')}{' '}
                                 <strong>
                                     {formatUnit(
                                         temp.temperature_c,
@@ -1349,7 +1314,7 @@ function TafSegment({
 
             {segment.wind_shear?.height_ft && (
                 <div className="mt-3 rounded-lg border border-amber-500/25 bg-amber-500/[0.06] px-3 py-2 text-xs">
-                    Wind shear informado a{' '}
+                    {i18n.t('show.weather.windShearAt')}{' '}
                     {segment.wind_shear.height_ft} ft
                     {segment.wind_shear.direction_deg
                         ? ` · ${segment.wind_shear.direction_deg}°`
@@ -1362,13 +1327,13 @@ function TafSegment({
 
             {segment.not_decoded && (
                 <div className="mt-3 text-xs text-muted">
-                    No decodificado: {segment.not_decoded}
+                    {i18n.t('show.weather.notDecoded')}: {segment.not_decoded}
                 </div>
             )}
 
             {index === 0 && change === 'BASE' && (
                 <div className="mt-3 text-[11px] text-muted">
-                    Condiciones predominantes iniciales del TAF.
+                    {i18n.t('show.weather.initialTafConditions')}
                 </div>
             )}
         </div>
@@ -1432,7 +1397,7 @@ function RawAviationMessage({
             </div>
 
             <div className="mt-2 break-words font-mono text-sm font-medium leading-6 text-foreground">
-                {value || 'No informado'}
+                {value || i18n.t('common.notReported')}
             </div>
         </div>
     );
@@ -1491,7 +1456,7 @@ function ObservacionSmn({
         <>
             <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
                 <WeatherMetric
-                    label="Temperatura"
+                    label={i18n.t('weather.temperature')}
                     value={formatUnit(
                         data.temperature_c,
                         '°C',
@@ -1501,7 +1466,7 @@ function ObservacionSmn({
                 />
 
                 <WeatherMetric
-                    label="Humedad"
+                    label={i18n.t('weather.humidity')}
                     value={formatUnit(
                         data.humidity_pct,
                         '%',
@@ -1510,7 +1475,7 @@ function ObservacionSmn({
                 />
 
                 <WeatherMetric
-                    label="Presión"
+                    label={i18n.t('weather.pressure')}
                     value={formatUnit(
                         data.pressure_hpa,
                         'hPa',
@@ -1519,14 +1484,14 @@ function ObservacionSmn({
                 />
 
                 <WeatherMetric
-                    label="Visibilidad"
+                    label={i18n.t('weather.visibility')}
                     value={formatVisibility(
                         data.visibility_m
                     )}
                 />
 
                 <WeatherMetric
-                    label="Viento"
+                    label={i18n.t('weather.wind')}
                     value={
                         data.wind
                             ? `${formatDirection(
@@ -1537,12 +1502,12 @@ function ObservacionSmn({
                                   'kt',
                                   1
                               )}`
-                            : 'No informado'
+                            : i18n.t('common.notReported')
                     }
                 />
 
                 <WeatherMetric
-                    label="Punto de rocío"
+                    label={i18n.t('weather.dewpoint')}
                     value={formatUnit(
                         data.dewpoint_c,
                         '°C',
@@ -1551,7 +1516,7 @@ function ObservacionSmn({
                 />
 
                 <WeatherMetric
-                    label="Nubosidad"
+                    label={i18n.t('weather.cloud')}
                     value={formatUnit(
                         data.cloud_cover_pct,
                         '%',
@@ -1560,7 +1525,7 @@ function ObservacionSmn({
                 />
 
                 <WeatherMetric
-                    label="Tiempo presente"
+                    label={i18n.t('show.weather.presentWeather')}
                     value={formatPresentWeather(
                         data.weather?.description
                     )}
@@ -1571,12 +1536,12 @@ function ObservacionSmn({
                 <div className="grid gap-5 md:grid-cols-2">
                     <div>
                         <div className="text-[11px] uppercase tracking-[0.1em] text-muted">
-                            Estación utilizada
+                            {i18n.t('show.weather.stationUsed')}
                         </div>
 
                         <div className="mt-1.5 font-medium">
                             {data.station?.name ||
-                                'No informada'}
+                                i18n.t('common.notReported')}
                         </div>
 
                         <div className="mt-1 font-mono text-xs text-muted">
@@ -1590,12 +1555,12 @@ function ObservacionSmn({
 
                     <div>
                         <div className="text-[11px] uppercase tracking-[0.1em] text-muted">
-                            Representatividad
+                            {i18n.t('show.weather.representativeness')}
                         </div>
 
                         <div className="mt-1.5 font-medium">
                             {association?.label ||
-                                'No informada'}
+                                i18n.t('common.notReported')}
                         </div>
 
                         {association?.distance_km !==
@@ -1603,8 +1568,7 @@ function ObservacionSmn({
                             association?.distance_km !==
                                 undefined && (
                                 <div className="mt-1 text-xs text-muted">
-                                    Distancia a la
-                                    estación:{' '}
+                                    {i18n.t('show.weather.stationDistance')}: {' '}
                                     {formatNumber(
                                         association.distance_km,
                                         1
@@ -1617,13 +1581,13 @@ function ObservacionSmn({
 
                 <div className="mt-4 flex flex-wrap items-center gap-x-3 gap-y-1 border-t border-border pt-3 text-xs text-muted">
                     <span>
-                        Fuente: SMN / WIS2
+                        {i18n.t('common.source')}: SMN / WIS2
                     </span>
 
                     <span>·</span>
 
                     <span>
-                        Observado:{' '}
+                        {i18n.t('weather.observed')}: {' '}
                         {formatObservationTime(
                             data.observed_at
                         )}
@@ -1634,7 +1598,7 @@ function ObservacionSmn({
                             <span>·</span>
 
                             <span className="font-medium text-amber-500">
-                                Dato desactualizado
+                                {i18n.t('show.weather.outdatedData')}
                             </span>
                         </>
                     )}
@@ -1655,12 +1619,11 @@ function ObservationTooFar({
     return (
         <div className="rounded-xl border border-border bg-background/45 p-5">
             <div className="font-medium">
-                Sin observación local representativa
+                {i18n.t('show.weather.noRepresentativeLocalObservation')}
             </div>
 
             <p className="mt-2 max-w-3xl text-sm leading-6 text-muted">
-                La estación meteorológica disponible más
-                cercana se encuentra a{' '}
+                {i18n.t('show.weather.nearestStationPrefix')} {' '}
                 <strong className="font-medium text-foreground">
                     {formatNumber(
                         association?.distance_km,
@@ -1668,14 +1631,12 @@ function ObservationTooFar({
                     )}{' '}
                     km
                 </strong>
-                . Por esa distancia, AeroInfo no presenta
-                sus mediciones como condiciones locales de
-                este aeródromo.
+                . {i18n.t('show.weather.nearestStationSuffix')}
             </p>
 
             {association?.station?.name && (
                 <div className="mt-4 border-t border-border pt-3 text-xs text-muted">
-                    Estación de referencia más cercana:{' '}
+                    {i18n.t('show.weather.nearestReferenceStation')}: {' '}
                     <span className="font-medium text-foreground">
                         {
                             association.station
@@ -1700,17 +1661,49 @@ function ForecastTable({
 }) {
     return (
         <>
-            <div className="overflow-hidden rounded-xl border border-border">
+            <div className="grid gap-3 md:hidden">
+                {rows.map((row: any, index: number) => (
+                    <div
+                        key={`mobile-${row.time}-${index}`}
+                        className="rounded-xl border border-border bg-background/40 p-4"
+                    >
+                        <div className="flex items-start justify-between gap-4">
+                            <div>
+                                <div className="text-xs uppercase tracking-[0.1em] text-muted">
+                                    {i18n.t('show.weather.time')}
+                                </div>
+                                <div className="mt-1 font-semibold">
+                                    {formatForecastTime(row.time)}
+                                </div>
+                            </div>
+                            <div className="text-right text-sm font-medium">
+                                {formatWeatherCode(row.weather_code)}
+                            </div>
+                        </div>
+
+                        <div className="mt-4 grid grid-cols-2 gap-3">
+                            <WeatherMetric label={i18n.t('weather.temperature')} value={formatUnit(row.temperature_c, '°C', 1)} />
+                            <WeatherMetric label={i18n.t('weather.humidity')} value={formatUnit(row.humidity_pct, '%', 0)} />
+                            <WeatherMetric label={i18n.t('weather.wind')} value={`${formatDirection(row.wind_direction_deg)} · ${formatUnit(row.wind_speed_kt, 'kt', 1)}`} />
+                            <WeatherMetric label={i18n.t('show.weather.gust')} value={formatUnit(row.wind_gust_kt, 'kt', 1)} />
+                            <WeatherMetric label={i18n.t('weather.visibility')} value={formatVisibility(row.visibility_m)} />
+                            <WeatherMetric label={i18n.t('show.weather.precipitation')} value={formatUnit(row.precipitation_mm, 'mm', 1)} />
+                        </div>
+                    </div>
+                ))}
+            </div>
+
+            <div className="hidden overflow-hidden rounded-xl border border-border md:block">
                 <div className="overflow-x-auto">
                     <table className="w-full min-w-[940px] text-sm">
                         <thead className="bg-background/55">
                             <tr className="border-b border-border text-left text-[11px] uppercase tracking-[0.08em] text-muted">
                                 <th className="px-4 py-3 font-medium">
-                                    Hora
+                                    {i18n.t('show.weather.time')}
                                 </th>
 
                                 <th className="px-4 py-3 font-medium">
-                                    Condición
+                                    {i18n.t('show.weather.condition')}
                                 </th>
 
                                 <th className="px-4 py-3 font-medium">
@@ -1722,23 +1715,23 @@ function ForecastTable({
                                 </th>
 
                                 <th className="px-4 py-3 font-medium">
-                                    Viento
+                                    {i18n.t('weather.wind')}
                                 </th>
 
                                 <th className="px-4 py-3 font-medium">
-                                    Ráfaga
+                                    {i18n.t('show.weather.gust')}
                                 </th>
 
                                 <th className="px-4 py-3 font-medium">
-                                    Presión
+                                    {i18n.t('weather.pressure')}
                                 </th>
 
                                 <th className="px-4 py-3 font-medium">
-                                    Visibilidad
+                                    {i18n.t('weather.visibility')}
                                 </th>
 
                                 <th className="px-4 py-3 font-medium">
-                                    Precip.
+                                    {i18n.t('show.weather.precipitation')}
                                 </th>
                             </tr>
                         </thead>
@@ -1832,16 +1825,16 @@ function ForecastTable({
 
             <div className="mt-4 flex flex-wrap gap-x-5 gap-y-1 text-xs text-muted">
                 <span>
-                    Fuente: Open-Meteo
+                    {i18n.t('common.source')}: Open-Meteo
                 </span>
 
                 <span>
-                    Modelo:{' '}
+                    {i18n.t('show.weather.model')}: {' '}
                     {formatModelName(model)}
                 </span>
 
                 <span>
-                    Horizonte mostrado: próximas 12 horas
+                    {i18n.t('show.weather.horizon12h')}
                 </span>
             </div>
         </>
@@ -1885,38 +1878,38 @@ function MeteorologiaStatus({
     stale?: boolean;
 }) {
     let text =
-        'Sin datos';
+        i18n.t('show.status.noData');
 
     let className =
         'border-border bg-background/55 text-muted';
 
     if (stale) {
         text =
-            'Desactualizado';
+            i18n.t('show.status.outdated');
 
         className =
             'border-amber-500/25 bg-amber-500/10 text-amber-500';
     } else if (status === 'ok') {
         text =
-            'Disponible';
+            i18n.t('common.available');
 
         className =
             'border-emerald-500/25 bg-emerald-500/10 text-emerald-500';
     } else if (status === 'error') {
         text =
-            'Error';
+            i18n.t('show.status.error');
 
         className =
             'border-red-500/25 bg-red-500/10 text-red-500';
     } else if (status === 'too_far') {
         text =
-            'Sin observación local';
+            i18n.t('show.status.noLocalObservation');
 
         className =
             'border-amber-500/25 bg-amber-500/10 text-amber-500';
     } else if (status === 'disabled') {
         text =
-            'Deshabilitado';
+            i18n.t('show.status.disabled');
     }
 
     return (
@@ -1967,7 +1960,7 @@ function Section({
     children: ReactNode;
 }) {
     return (
-        <section className="rounded-2xl border border-border bg-surface p-5 shadow-sm md:p-6">
+        <section className="rounded-2xl border border-border bg-surface p-4 shadow-sm sm:p-5 md:p-6">
             {eyebrow && (
                 <div className="text-[11px] font-medium uppercase tracking-[0.16em] text-primary">
                     {eyebrow}
@@ -1999,17 +1992,17 @@ function Field({
         value !== undefined &&
         value !== ''
             ? value
-            : 'No informado';
+            : i18n.t('common.notReported')
 
     return (
-        <div className="grid grid-cols-[1fr_auto] gap-4 border-b border-border py-3 last:border-b-0">
+        <div className="grid gap-1 border-b border-border py-3 last:border-b-0 sm:grid-cols-[1fr_auto] sm:gap-4">
             <span className="text-sm text-muted">
                 {label}
             </span>
 
             <span
                 className={[
-                    'text-right text-sm font-medium text-foreground',
+                    'text-left text-sm font-medium text-foreground sm:text-right',
                     mono
                         ? 'font-mono'
                         : '',
@@ -2119,7 +2112,7 @@ function formatObservationTime(
     value?: string
 ) {
     if (!value) {
-        return 'No informado';
+        return i18n.t('common.notReported');
     }
 
     const date =
@@ -2134,7 +2127,8 @@ function formatObservationTime(
     }
 
     return new Intl.DateTimeFormat(
-        'es-AR',
+    getIntlLocale(),
+        
         {
             dateStyle: 'short',
             timeStyle: 'short',
@@ -2142,6 +2136,27 @@ function formatObservationTime(
                 'America/Argentina/Buenos_Aires',
         }
     ).format(date);
+}
+
+function getIntlLocale(): string {
+    const language =
+        i18n.resolvedLanguage ||
+        i18n.language ||
+        'es';
+
+    if (language.startsWith('de')) {
+        return 'de-DE';
+    }
+
+    if (language.startsWith('pt')) {
+        return 'pt-BR';
+    }
+
+    if (language.startsWith('en')) {
+        return 'en-US';
+    }
+
+    return 'es-AR';
 }
 
 function formatForecastTime(
@@ -2165,7 +2180,7 @@ function formatForecastTime(
     }
 
     return new Intl.DateTimeFormat(
-        'es-AR',
+    getIntlLocale(),
         {
             weekday: 'short',
             hour: '2-digit',
@@ -2186,7 +2201,7 @@ function formatUnit(
         value === undefined ||
         value === ''
     ) {
-        return 'No informado';
+        return i18n.t('common.notReported');
     }
 
     const number =
@@ -2195,7 +2210,7 @@ function formatUnit(
     if (
         Number.isNaN(number)
     ) {
-        return 'No informado';
+        return i18n.t('common.notReported');
     }
 
     return `${number.toFixed(
@@ -2230,7 +2245,7 @@ function formatVisibility(
     if (
         Number.isNaN(meters)
     ) {
-        return 'No informada';
+        return i18n.t('common.notReported');
     }
 
     if (meters >= 10000) {
@@ -2295,7 +2310,7 @@ function formatModelName(
 
     return (
         model ||
-        'No informado'
+        i18n.t('common.notReported')
     );
 }
 
@@ -2303,20 +2318,19 @@ function formatPresentWeather(
     value?: string
 ) {
     if (!value) {
-        return 'No informado';
+        return i18n.t('common.notReported');
     }
 
     const translations: Record<
         string,
         string
     > = {
-        MIST: 'Neblina',
-        FOG: 'Niebla',
-        RAIN: 'Lluvia',
-        DRIZZLE: 'Llovizna',
-        SNOW: 'Nieve',
-        THUNDERSTORM:
-            'Tormenta',
+        MIST: i18n.t('show.weather.phenomena.mist'),
+        FOG: i18n.t('show.weather.phenomena.fog'),
+        RAIN: i18n.t('show.weather.phenomena.rain'),
+        DRIZZLE: i18n.t('show.weather.phenomena.drizzle'),
+        SNOW: i18n.t('show.weather.phenomena.snow'),
+        THUNDERSTORM: i18n.t('show.weather.phenomena.thunderstorm'),
     };
 
     return (
@@ -2351,7 +2365,7 @@ function formatZuluTime(
     value?: string
 ) {
     if (!value) {
-        return 'No informado';
+        return i18n.t('common.notReported');
     }
 
     const date =
@@ -2367,7 +2381,7 @@ function formatZuluTime(
 
     const day =
         new Intl.DateTimeFormat(
-            'es-AR',
+    getIntlLocale(),
             {
                 day: '2-digit',
                 month: 'short',
@@ -2380,8 +2394,8 @@ function formatZuluTime(
 
     const time =
         new Intl.DateTimeFormat(
-            'es-AR',
-            {
+        getIntlLocale(),
+        {
                 hour: '2-digit',
                 minute: '2-digit',
                 hour12: false,
@@ -2396,7 +2410,7 @@ function formatAviationWind(
     wind: any
 ) {
     if (!wind) {
-        return 'No informado';
+        return i18n.t('common.notReported');
     }
 
     const direction =
@@ -2416,7 +2430,7 @@ function formatAviationWind(
             speed === undefined ||
             speed === '')
     ) {
-        return 'No informado';
+        return i18n.t('common.notReported');
     }
 
     const directionLabel =
@@ -2449,7 +2463,7 @@ function formatAviationVisibility(
         value === undefined ||
         value === ''
     ) {
-        return 'No informada';
+        return i18n.t('common.notReported');
     }
 
     if (
@@ -2491,7 +2505,7 @@ function formatCloudLayers(
     clouds: any[]
 ) {
     if (!Array.isArray(clouds) || !clouds.length) {
-        return 'Sin capas informadas';
+        return i18n.t('show.weather.noCloudLayers');
     }
 
     return clouds
@@ -2519,29 +2533,29 @@ function formatAviationWeather(
     value?: string
 ) {
     if (!value) {
-        return 'Sin fenómeno informado';
+        return i18n.t('show.weather.noPhenomenon');
     }
 
     const translations: Record<string, string> = {
-        TSRA: 'Tormenta con lluvia',
-        '-TSRA': 'Tormenta débil con lluvia',
-        '+TSRA': 'Tormenta fuerte con lluvia',
-        RA: 'Lluvia',
-        '-RA': 'Lluvia débil',
-        '+RA': 'Lluvia fuerte',
-        DZ: 'Llovizna',
-        '-DZ': 'Llovizna débil',
-        '+DZ': 'Llovizna fuerte',
-        BR: 'Neblina',
-        FG: 'Niebla',
-        HZ: 'Bruma',
-        SHRA: 'Chaparrones de lluvia',
-        '-SHRA': 'Chaparrones débiles',
-        '+SHRA': 'Chaparrones fuertes',
-        SN: 'Nieve',
-        '-SN': 'Nieve débil',
-        '+SN': 'Nieve fuerte',
-        TS: 'Tormenta',
+        TSRA: i18n.t('show.weather.wx.tsra'),
+        '-TSRA': i18n.t('show.weather.wx.minusTsra'),
+        '+TSRA': i18n.t('show.weather.wx.plusTsra'),
+        RA: i18n.t('show.weather.wx.ra'),
+        '-RA': i18n.t('show.weather.wx.minusRa'),
+        '+RA': i18n.t('show.weather.wx.plusRa'),
+        DZ: i18n.t('show.weather.wx.dz'),
+        '-DZ': i18n.t('show.weather.wx.minusDz'),
+        '+DZ': i18n.t('show.weather.wx.plusDz'),
+        BR: i18n.t('show.weather.wx.br'),
+        FG: i18n.t('show.weather.wx.fg'),
+        HZ: i18n.t('show.weather.wx.hz'),
+        SHRA: i18n.t('show.weather.wx.shra'),
+        '-SHRA': i18n.t('show.weather.wx.minusShra'),
+        '+SHRA': i18n.t('show.weather.wx.plusShra'),
+        SN: i18n.t('show.weather.wx.sn'),
+        '-SN': i18n.t('show.weather.wx.minusSn'),
+        '+SN': i18n.t('show.weather.wx.plusSn'),
+        TS: i18n.t('show.weather.wx.ts'),
     };
 
     const normalized =
@@ -2560,7 +2574,7 @@ function formatTafChange(
         (change || 'BASE').toUpperCase();
 
     const labels: Record<string, string> = {
-        BASE: 'Base',
+        BASE: i18n.t('show.weather.tafBase'),
         TEMPO: 'TEMPO',
         BECMG: 'BECMG',
         FM: 'FM',
@@ -2595,7 +2609,7 @@ function formatTafPeriod(
     to?: string
 ) {
     if (!from && !to) {
-        return 'Período no informado';
+        return i18n.t('show.weather.periodNotReported');
     }
 
     if (from && to) {
@@ -2680,38 +2694,38 @@ function formatWeatherCode(
         number,
         string
     > = {
-        0: 'Despejado',
-        1: 'Mayormente despejado',
-        2: 'Parcialmente nublado',
-        3: 'Cubierto',
-        45: 'Niebla',
-        48: 'Niebla con escarcha',
-        51: 'Llovizna débil',
-        53: 'Llovizna moderada',
-        55: 'Llovizna intensa',
-        56: 'Llovizna helada débil',
-        57: 'Llovizna helada intensa',
-        61: 'Lluvia débil',
-        63: 'Lluvia moderada',
-        65: 'Lluvia intensa',
-        66: 'Lluvia helada débil',
-        67: 'Lluvia helada intensa',
-        71: 'Nieve débil',
-        73: 'Nieve moderada',
-        75: 'Nieve intensa',
-        77: 'Granos de nieve',
-        80: 'Chaparrones débiles',
-        81: 'Chaparrones moderados',
-        82: 'Chaparrones intensos',
-        85: 'Nevadas débiles',
-        86: 'Nevadas intensas',
-        95: 'Tormenta',
-        96: 'Tormenta con granizo',
-        99: 'Tormenta fuerte con granizo',
+        0: i18n.t('show.weather.codes.clear'),
+        1: i18n.t('show.weather.codes.mostlyClear'),
+        2: i18n.t('show.weather.codes.partlyCloudy'),
+        3: i18n.t('show.weather.codes.overcast'),
+        45: i18n.t('show.weather.codes.fog'),
+        48: i18n.t('show.weather.codes.rimeFog'),
+        51: i18n.t('show.weather.codes.lightDrizzle'),
+        53: i18n.t('show.weather.codes.moderateDrizzle'),
+        55: i18n.t('show.weather.codes.heavyDrizzle'),
+        56: i18n.t('show.weather.codes.lightFreezingDrizzle'),
+        57: i18n.t('show.weather.codes.heavyFreezingDrizzle'),
+        61: i18n.t('show.weather.codes.lightRain'),
+        63: i18n.t('show.weather.codes.moderateRain'),
+        65: i18n.t('show.weather.codes.heavyRain'),
+        66: i18n.t('show.weather.codes.lightFreezingRain'),
+        67: i18n.t('show.weather.codes.heavyFreezingRain'),
+        71: i18n.t('show.weather.codes.lightSnow'),
+        73: i18n.t('show.weather.codes.moderateSnow'),
+        75: i18n.t('show.weather.codes.heavySnow'),
+        77: i18n.t('show.weather.codes.snowGrains'),
+        80: i18n.t('show.weather.codes.lightShowers'),
+        81: i18n.t('show.weather.codes.moderateShowers'),
+        82: i18n.t('show.weather.codes.heavyShowers'),
+        85: i18n.t('show.weather.codes.lightSnowShowers'),
+        86: i18n.t('show.weather.codes.heavySnowShowers'),
+        95: i18n.t('show.weather.codes.thunderstorm'),
+        96: i18n.t('show.weather.codes.thunderstormHail'),
+        99: i18n.t('show.weather.codes.severeThunderstormHail'),
     };
 
     return (
         labels[value] ||
-        'Sin descripción'
+        i18n.t('show.weather.noDescription')
     );
 }

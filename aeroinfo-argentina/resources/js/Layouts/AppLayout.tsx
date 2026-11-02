@@ -1,50 +1,233 @@
 import { Link } from '@inertiajs/react';
+import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
+
+import LanguageSelector from '../Components/LanguageSelector';
 import ThemeSelector from '../Components/ThemeSelector';
 
-export default function AppLayout({ children }: { children: React.ReactNode }) {
+export default function AppLayout({
+    children,
+}: {
+    children: React.ReactNode;
+}) {
+    const { t } = useTranslation();
+
+    const [mobileMenuOpen, setMobileMenuOpen] =
+        useState(false);
+
+    function closeMobileMenu() {
+        setMobileMenuOpen(false);
+    }
+
     return (
         <div className="flex min-h-screen flex-col bg-background">
             <header className="sticky top-0 z-50 border-b border-border/85 bg-surface/94 backdrop-blur-xl">
-                <div className="mx-auto flex h-[64px] max-w-[86rem] items-center justify-between gap-5 px-5 sm:px-6 lg:px-8">
-                    <Link href="/" className="group flex items-center gap-3" aria-label="Aeroinfo Argentina - Inicio">
-                        <span className="brand-mark">AR</span>
-                        <span className="text-[14px] font-semibold tracking-[-0.012em] text-foreground sm:text-[14.5px]">
-                            AEROINFO <span className="text-primary">ARGENTINA</span>
+                <div className="mx-auto flex h-[64px] max-w-[86rem] items-center justify-between gap-3 px-4 sm:px-6 lg:px-8">
+                    <Link
+                        href="/"
+                        onClick={closeMobileMenu}
+                        className="group flex min-w-0 items-center gap-2.5 sm:gap-3"
+                        aria-label="Aeroinfo Argentina"
+                    >
+                        <span className="brand-mark shrink-0">
+                            AR
+                        </span>
+
+                        <span className="truncate text-[13px] font-semibold tracking-[-0.012em] text-foreground sm:text-[14.5px]">
+                            AEROINFO{' '}
+                            <span className="text-primary">
+                                ARGENTINA
+                            </span>
                         </span>
                     </Link>
 
-                    <div className="flex items-center gap-4 sm:gap-5">
-                        <nav className="hidden items-center gap-7 text-[13px] font-medium text-muted md:flex" aria-label="Navegación principal">
-                            <Link className="nav-link" href="/aerodromos">Aeródromos</Link>
-                            <Link className="nav-link" href="/mapa">Mapa</Link>
-                            <Link className="nav-link" href="/fuentes">Fuentes</Link>
+                    <div className="flex shrink-0 items-center gap-2 sm:gap-3">
+                        <nav
+                            className="hidden items-center gap-7 text-[13px] font-medium text-muted lg:flex"
+                            aria-label={t(
+                                'nav.mainNavigation'
+                            )}
+                        >
+                            <Link
+                                className="nav-link"
+                                href="/aerodromos"
+                            >
+                                {t(
+                                    'nav.aerodromes'
+                                )}
+                            </Link>
+
+                            <Link
+                                className="nav-link"
+                                href="/mapa"
+                            >
+                                {t('nav.map')}
+                            </Link>
+
+                            <Link
+                                className="nav-link"
+                                href="/fuentes"
+                            >
+                                {t(
+                                    'nav.sources'
+                                )}
+                            </Link>
                         </nav>
-                        <div className="hidden h-5 w-px bg-border sm:block" aria-hidden="true" />
+
+                        <div
+                            className="hidden h-5 w-px bg-border lg:block"
+                            aria-hidden="true"
+                        />
+
+                        <LanguageSelector />
+
                         <ThemeSelector />
+
+                        <button
+                            type="button"
+                            onClick={() =>
+                                setMobileMenuOpen(
+                                    (value) =>
+                                        !value
+                                )
+                            }
+                            className="flex h-9 w-9 items-center justify-center rounded-lg border border-border bg-background/45 text-foreground transition hover:bg-background lg:hidden"
+                            aria-label={
+                                mobileMenuOpen
+                                    ? t(
+                                          'nav.closeMenu'
+                                      )
+                                    : t(
+                                          'nav.openMenu'
+                                      )
+                            }
+                            aria-expanded={
+                                mobileMenuOpen
+                            }
+                        >
+                            {mobileMenuOpen ? (
+                                <svg
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    className="h-5 w-5"
+                                    aria-hidden="true"
+                                >
+                                    <path
+                                        d="M6 6L18 18M18 6L6 18"
+                                        stroke="currentColor"
+                                        strokeWidth="1.8"
+                                        strokeLinecap="round"
+                                    />
+                                </svg>
+                            ) : (
+                                <svg
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    className="h-5 w-5"
+                                    aria-hidden="true"
+                                >
+                                    <path
+                                        d="M4 7H20M4 12H20M4 17H20"
+                                        stroke="currentColor"
+                                        strokeWidth="1.8"
+                                        strokeLinecap="round"
+                                    />
+                                </svg>
+                            )}
+                        </button>
                     </div>
                 </div>
+
+                {mobileMenuOpen && (
+                    <div className="border-t border-border bg-surface lg:hidden">
+                        <nav
+                            className="mx-auto flex max-w-[86rem] flex-col px-4 py-3 sm:px-6"
+                            aria-label={t(
+                                'nav.mobileNavigation'
+                            )}
+                        >
+                            <MobileNavLink
+                                href="/aerodromos"
+                                onClick={
+                                    closeMobileMenu
+                                }
+                            >
+                                {t(
+                                    'nav.aerodromes'
+                                )}
+                            </MobileNavLink>
+
+                            <MobileNavLink
+                                href="/mapa"
+                                onClick={
+                                    closeMobileMenu
+                                }
+                            >
+                                {t('nav.map')}
+                            </MobileNavLink>
+
+                            <MobileNavLink
+                                href="/fuentes"
+                                onClick={
+                                    closeMobileMenu
+                                }
+                            >
+                                {t(
+                                    'nav.sources'
+                                )}
+                            </MobileNavLink>
+                        </nav>
+                    </div>
+                )}
             </header>
 
-            <main className="flex-1">{children}</main>
+            <main className="min-w-0 flex-1">
+                {children}
+            </main>
 
             <footer className="border-t border-border bg-surface/72">
-                <div className="mx-auto grid max-w-[86rem] gap-8 px-5 py-7 text-[0.8rem] sm:px-6 md:grid-cols-[1.55fr_0.9fr_1fr] lg:px-8">
-                    <div>
-                        <p className="text-[0.82rem] font-semibold text-foreground">Aeroinfo Argentina · 2026</p>
+                <div className="mx-auto grid max-w-[86rem] gap-7 px-4 py-7 text-[0.8rem] sm:px-6 md:grid-cols-2 lg:grid-cols-[1.55fr_0.9fr_1fr] lg:px-8">
+                    <div className="md:col-span-2 lg:col-span-1">
+                        <p className="text-[0.82rem] font-semibold text-foreground">
+                            Aeroinfo Argentina · 2026
+                        </p>
+
                         <p className="mt-1.5 max-w-md leading-[1.55] text-muted">
-                           Información aeronáutica de referencia. No sustituye publicaciones oficiales.
+                            {t(
+                                'footer.reference'
+                            )}
                         </p>
                     </div>
 
                     <div>
-                        <p className="footer-label">Datos</p>
-                        <p className="mt-1.5 leading-[1.55] text-muted">ANAC / Secretaría de Transporte</p>
-                        <p className="text-muted">Septiembre 2026</p>
+                        <p className="footer-label">
+                            {t(
+                                'footer.data'
+                            )}
+                        </p>
+
+                        <p className="mt-1.5 leading-[1.55] text-muted">
+                            ANAC / Secretaría de
+                            Transporte
+                        </p>
+
+                        <p className="text-muted">
+                            {t(
+                                'footer.dataDate'
+                            )}
+                        </p>
                     </div>
 
-                    <div className="text-xs text-slate-500 md:text-right">
-                        <p>
-                            Proyecto independiente · Diseño y desarrollo:
+                    <div className="text-xs text-slate-500 lg:text-right">
+                        <p className="leading-5">
+                            {t(
+                                'footer.independentProject'
+                            )}
+                            {' · '}
+                            {t(
+                                'footer.designDevelopment'
+                            )}
+                            :
                             <span className="ml-1 font-medium text-slate-300">
                                 Camila Caprino
                             </span>
@@ -53,5 +236,25 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
                 </div>
             </footer>
         </div>
+    );
+}
+
+function MobileNavLink({
+    href,
+    children,
+    onClick,
+}: {
+    href: string;
+    children: React.ReactNode;
+    onClick: () => void;
+}) {
+    return (
+        <Link
+            href={href}
+            onClick={onClick}
+            className="border-b border-border/70 px-1 py-3.5 text-sm font-medium text-foreground transition last:border-b-0 hover:text-primary"
+        >
+            {children}
+        </Link>
     );
 }

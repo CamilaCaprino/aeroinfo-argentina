@@ -1,9 +1,13 @@
 import {useEffect,useState} from 'react';
+import { useTranslation } from 'react-i18next';
 import {Moon,Sun,Monitor} from 'lucide-react';
 
 type Theme='light'|'dark'|'system';
 
 export default function ThemeSelector(){
+
+    const { t } = useTranslation();
+
     const [theme,setTheme]=useState<Theme>(()=>
         (localStorage.getItem('theme') as Theme)||'dark'
     );
@@ -30,7 +34,7 @@ export default function ThemeSelector(){
     return (
         <div
             className="flex rounded-lg border border-border p-1"
-            aria-label="Tema visual"
+            aria-label={t('theme.selector')}
         >
             {([
                 ['light',Sun],
