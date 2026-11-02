@@ -317,7 +317,7 @@ const es = {
         dataProvider:
         'ANAC / Secretaría de Transporte',
         pageTitle: 'Inicio',
-        eyebrow: 'Información aeronáutica trazable',
+        eyebrow:'Información aeronáutica trazable · República Argentina',
         title: 'Encontrá aeródromos y helipuertos de Argentina',
         description:
             'Inventario basado en ANAC / Secretaría de Transporte, con referencias documentales y mapa interactivo.',

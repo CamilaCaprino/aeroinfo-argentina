@@ -201,7 +201,7 @@ const en = {
         dataProvider:
         'ANAC / Secretaría de Transporte',
         pageTitle: 'Home',
-        eyebrow: 'Traceable aeronautical information',
+        eyebrow:'Aeronautical information · Argentina',
         title: 'Find aerodromes and heliports across Argentina',
         description:
             'Inventory based on ANAC / Secretariat of Transportation data, with documentary references and an interactive map.',

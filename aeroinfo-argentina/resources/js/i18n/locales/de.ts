@@ -219,7 +219,7 @@ const de = {
         dataProvider:
         'ANAC / Secretaría de Transporte',
         pageTitle: 'Startseite',
-        eyebrow: 'Nachvollziehbare Luftfahrtinformationen',
+        eyebrow: 'Luftfahrtinformationen · Argentinien',
         title: 'Flugplätze und Hubschrauberlandeplätze in Argentinien finden',
         description:
             'Verzeichnis auf Grundlage von Daten der ANAC / Verkehrsbehörde mit Dokumentenverweisen und interaktiver Karte.',

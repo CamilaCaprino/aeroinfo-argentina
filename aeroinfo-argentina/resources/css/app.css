@@ -597,3 +597,131 @@ a {
         animation: none !important;
     }
 }
+
+/* =========================================================
+   AEROINFO · IDENTIDAD ARGENTINA
+   ========================================================= */
+
+.argentina-hero-ambient {
+    background:
+        radial-gradient(
+            circle at 74% 45%,
+            rgba(116, 172, 223, 0.09),
+            transparent 30%
+        ),
+        radial-gradient(
+            circle at 16% 75%,
+            rgba(35, 109, 164, 0.08),
+            transparent 34%
+        );
+}
+
+.argentina-band {
+    position: absolute;
+    left: -5%;
+    width: 110%;
+    pointer-events: none;
+}
+
+.argentina-band-top {
+    top: 18%;
+    height: 15%;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(116, 172, 223, 0.035) 20%,
+        rgba(116, 172, 223, 0.075) 52%,
+        rgba(116, 172, 223, 0.025) 82%,
+        transparent
+    );
+    transform: rotate(-2deg);
+}
+
+.argentina-band-middle {
+    top: 33%;
+    height: 13%;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 255, 255, 0.012) 20%,
+        rgba(255, 255, 255, 0.045) 52%,
+        rgba(255, 255, 255, 0.012) 82%,
+        transparent
+    );
+    transform: rotate(-2deg);
+}
+
+.argentina-band-bottom {
+    top: 46%;
+    height: 15%;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(116, 172, 223, 0.025) 20%,
+        rgba(116, 172, 223, 0.065) 52%,
+        rgba(116, 172, 223, 0.02) 82%,
+        transparent
+    );
+    transform: rotate(-2deg);
+}
+
+.argentina-eyebrow {
+    color: #74acdf;
+    letter-spacing: 0.18em;
+}
+
+.argentina-radar-secondary {
+    opacity: 0.22;
+    transform: scale(1.2);
+}
+
+.argentina-map-shape {
+    transform-box: fill-box;
+    transform-origin: center;
+}
+
+@media (max-width: 1023px) {
+    .argentina-map-shape {
+        opacity: 0.6;
+    }
+
+    .argentina-band-top {
+        top: 16%;
+    }
+
+    .argentina-band-middle {
+        top: 31%;
+    }
+
+    .argentina-band-bottom {
+        top: 45%;
+    }
+}
+
+@media (max-width: 767px) {
+    .argentina-hero-ambient svg {
+        transform: translateX(18%);
+        opacity: 0.48;
+    }
+
+    .argentina-radar-secondary {
+        opacity: 0.1;
+    }
+
+    .argentina-band {
+        width: 130%;
+        left: -15%;
+    }
+
+    .argentina-band-top {
+        opacity: 0.8;
+    }
+
+    .argentina-band-middle {
+        opacity: 0.7;
+    }
+
+    .argentina-band-bottom {
+        opacity: 0.8;
+    }
+}
