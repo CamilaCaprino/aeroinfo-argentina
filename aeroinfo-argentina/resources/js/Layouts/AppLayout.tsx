@@ -26,24 +26,30 @@ export default function AppLayout({
                     <Link
                         href="/"
                         onClick={closeMobileMenu}
-                        className="group flex min-w-0 items-center gap-2.5 sm:gap-3"
+                        className="group flex min-w-0 items-center gap-2 sm:gap-3"
                         aria-label="Aeroinfo Argentina"
                     >
                         <span className="brand-mark shrink-0">
                             AR
                         </span>
 
-                        <div className="flex min-w-0 items-center gap-2.5">
+                        <div className="flex min-w-0 items-center gap-2">
                             <div className="min-w-0">
-                                <div className="truncate text-[13px] font-semibold tracking-[-0.012em] text-foreground sm:text-[14.5px]">
-                                    AEROINFO{' '}
-                                    <span className="text-primary">
-                                        ARGENTINA
+                                <div className="text-[13px] font-semibold tracking-[-0.012em] text-foreground sm:text-[14.5px]">
+                                    <span>
+                                        AEROINFO
+                                    </span>
+
+                                    <span className="hidden sm:inline">
+                                        {' '}
+                                        <span className="text-primary">
+                                            ARGENTINA
+                                        </span>
                                     </span>
                                 </div>
 
                                 <div
-                                    className="mt-1 flex h-[2px] w-full min-w-[94px] overflow-hidden rounded-full opacity-90"
+                                    className="mt-1 flex h-[2px] w-full min-w-[52px] overflow-hidden rounded-full opacity-90"
                                     aria-hidden="true"
                                 >
                                     <span className="flex-1 bg-[#74acdf]" />
@@ -56,7 +62,7 @@ export default function AppLayout({
                         </div>
                     </Link>
 
-                    <div className="flex shrink-0 items-center gap-2 sm:gap-3">
+                    <div className="flex shrink-0 items-center gap-1.5 sm:gap-3">
                         <nav
                             className="hidden items-center gap-7 text-[13px] font-medium text-muted lg:flex"
                             aria-label={t(
@@ -103,7 +109,9 @@ export default function AppLayout({
 
                         <LanguageSelector />
 
-                        <ThemeSelector />
+                        <div className="hidden lg:block">
+                            <ThemeSelector />
+                        </div>
 
                         <button
                             type="button"
@@ -207,6 +215,14 @@ export default function AppLayout({
                                     'nav.sources'
                                 )}
                             </MobileNavLink>
+
+                            <div className="mt-3 border-t border-border pt-4">
+                                <div className="mb-2 text-[10px] font-semibold uppercase tracking-[0.14em] text-muted">
+                                    {t('theme.selector')}
+                                </div>
+
+                                <ThemeSelector />
+                            </div>
                         </nav>
                     </div>
                 )}
@@ -273,14 +289,14 @@ export default function AppLayout({
 function ArgentinaFlag() {
     return (
         <span
-            className="relative hidden h-[18px] w-[28px] shrink-0 overflow-hidden rounded-[3px] border border-border/70 shadow-sm sm:inline-flex"
+            className="relative inline-flex h-[16px] w-[25px] shrink-0 overflow-hidden rounded-[3px] border border-border/70 shadow-sm sm:h-[18px] sm:w-[28px]"
             aria-hidden="true"
         >
             <span className="absolute inset-x-0 top-0 h-1/3 bg-[#74acdf]" />
             <span className="absolute inset-x-0 top-1/3 h-1/3 bg-white" />
             <span className="absolute inset-x-0 bottom-0 h-1/3 bg-[#74acdf]" />
 
-            <span className="absolute left-1/2 top-1/2 h-[5px] w-[5px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#f6b40e] shadow-[0_0_3px_rgba(246,180,14,.45)]" />
+            <span className="absolute left-1/2 top-1/2 h-[4px] w-[4px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#f6b40e] sm:h-[5px] sm:w-[5px]" />
         </span>
     );
 }

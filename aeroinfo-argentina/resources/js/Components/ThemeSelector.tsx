@@ -1,60 +1,116 @@
-import {useEffect,useState} from 'react';
+import {
+    useEffect,
+    useState,
+} from 'react';
+
 import { useTranslation } from 'react-i18next';
-import {Moon,Sun,Monitor} from 'lucide-react';
+import {
+    Moon,
+    Sun,
+} from 'lucide-react';
 
-type Theme='light'|'dark'|'system';
+type Theme =
+    | 'light'
+    | 'dark';
 
-export default function ThemeSelector(){
+export default function ThemeSelector() {
+    const { t } =
+        useTranslation();
 
-    const { t } = useTranslation();
+    const [theme, setTheme] =
+        useState<Theme>(() => {
+            const savedTheme =
+                localStorage.getItem(
+                    'theme'
+                );
 
-    const [theme,setTheme]=useState<Theme>(()=>
-        (localStorage.getItem('theme') as Theme)||'dark'
-    );
+            return savedTheme ===
+                'light'
+                ? 'light'
+                : 'dark';
+        });
 
-    useEffect(()=>{
-        const mq=matchMedia('(prefers-color-scheme: dark)');
+    useEffect(() => {
+        document.documentElement.classList.toggle(
+            'dark',
+            theme === 'dark'
+        );
 
-        const apply=()=>{
-            document.documentElement.classList.toggle(
-                'dark',
-                theme==='dark'||(theme==='system'&&mq.matches)
-            );
-        };
+        localStorage.setItem(
+            'theme',
+            theme
+        );
+    }, [theme]);
 
-        apply();
-
-        localStorage.setItem('theme',theme);
-
-        mq.addEventListener('change',apply);
-
-        return()=>mq.removeEventListener('change',apply);
-    },[theme]);
+    const options = [
+        {
+            value: 'light' as const,
+            icon: Sun,
+            label: t(
+                'theme.light'
+            ),
+        },
+        {
+            value: 'dark' as const,
+            icon: Moon,
+            label: t(
+                'theme.dark'
+            ),
+        },
+    ];
 
     return (
         <div
-            className="flex rounded-lg border border-border p-1"
-            aria-label={t('theme.selector')}
+            className="inline-flex rounded-lg border border-border bg-background/45 p-1"
+            aria-label={t(
+                'theme.selector'
+            )}
         >
-            {([
-                ['light',Sun],
-                ['dark',Moon],
-                ['system',Monitor],
-            ] as const).map(([v,I])=>(
-                <button
-                    key={v}
-                    className={`rounded-md p-2 ${
-                        theme===v
-                            ? 'bg-primary text-primary-foreground'
-                            : ''
-                    }`}
-                    onClick={()=>setTheme(v)}
-                    aria-label={`Tema ${v}`}
-                    aria-pressed={theme===v}
-                >
-                    <I size={16}/>
-                </button>
-            ))}
+            {options.map(
+                ({
+                    value,
+                    icon: Icon,
+                    label,
+                }) => (
+                    <button
+                        key={
+                            value
+                        }
+                        type="button"
+                        className={[
+                            'flex h-8 w-8 items-center justify-center rounded-md transition',
+                            theme ===
+                            value
+                                ? 'bg-primary text-primary-foreground'
+                                : 'text-muted hover:bg-background hover:text-foreground',
+                        ].join(
+                            ' '
+                        )}
+                        onClick={() =>
+                            setTheme(
+                                value
+                            )
+                        }
+                        aria-label={
+                            label
+                        }
+                        aria-pressed={
+                            theme ===
+                            value
+                        }
+                        title={
+                            label
+                        }
+                    >
+                        <Icon
+                            size={
+                                16
+                            }
+                            aria-hidden="true"
+                        />
+                    </button>
+                )
+            )}
         </div>
     );
 }
