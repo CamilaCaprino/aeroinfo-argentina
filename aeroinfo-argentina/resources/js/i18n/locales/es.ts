@@ -10,6 +10,7 @@ const es = {
     nav: {
         aerodromes: 'Aeródromos',
         map: 'Mapa',
+        weather: 'Meteorología',
         sources: 'Fuentes',
 
         mainNavigation:
@@ -189,6 +190,7 @@ const es = {
     },
 
     show: {
+        viewWindMap: 'Ver viento en mapa',
         longitude: 'Longitud',
         noPublishedCode: 'SIN CÓDIGO PUBLICADO',
         locationNotReported: 'Ubicación no informada',
@@ -314,6 +316,8 @@ const es = {
     },
 
     home: {
+        weather: 'Meteorología',
+        openWeather: 'Viento y pronóstico',
         dataProvider:
         'ANAC / Secretaría de Transporte',
         pageTitle: 'Inicio',
@@ -408,6 +412,23 @@ const es = {
         light: 'Claro',
         dark: 'Oscuro',
         system: 'Sistema',
+    },
+
+    weatherMap: {
+        pageTitle: 'Meteorología',
+        eyebrow: 'Meteorología aeronáutica',
+        title: 'Viento sobre Argentina',
+        source:
+        'Visualización: Windy · Modelo seleccionado: ECMWF.',
+        description:
+            'Explorá la evolución del viento y las condiciones meteorológicas sobre el territorio argentino mediante un mapa interactivo.',
+        surfaceWind: 'Viento en superficie',
+        mapTitle: 'Mapa de viento',
+        mapSubtitle: 'Modelo ECMWF · Viento en superficie',
+        openInteractive: 'Abrir en Windy',
+        iframeTitle: 'Mapa interactivo de viento sobre Argentina',
+        disclaimer:
+            'Información meteorológica de referencia. Para planificación operacional y previa al vuelo, verificá siempre las fuentes aeronáuticas y meteorológicas aplicables.',
     },
 };
 

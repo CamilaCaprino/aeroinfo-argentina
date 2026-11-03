@@ -6,6 +6,7 @@ import L from 'leaflet';
 
 import AppLayout from '../../Layouts/AppLayout';
 import i18n from '../../i18n';
+import { Wind } from 'lucide-react';
 
 const detailMarkerIcon = L.divIcon({
     className: '',
@@ -99,6 +100,18 @@ export default function Show({
                                 >
                                     {t('show.viewNationalMap')}
                                 </Link>
+
+                                <Link
+                                    href={`/meteorologia?lat=${a.latitud}&lon=${a.longitud}&zoom=8`}
+                                    className="inline-flex items-center justify-center gap-2 rounded-lg border border-primary/20 bg-primary/[0.06] px-4 py-2.5 text-sm font-medium text-primary transition hover:bg-primary/[0.1]"
+                                >
+                                    <Wind
+                                        size={16}
+                                        aria-hidden="true"
+                                    />
+
+                                    {t('show.viewWindMap')}
+                                </Link>
                             </div>
                         )}
                     </div>
@@ -152,6 +165,8 @@ export default function Show({
                         >
                             <MeteorologiaPanel
                                 meteorologia={meteorologia}
+                                latitude={a.latitud}
+                                longitude={a.longitud}
                             />
                         </Section>
 
@@ -387,6 +402,18 @@ export default function Show({
                                             className="text-sm font-medium text-primary hover:underline"
                                         >
                                             {t('show.viewNationalMap')} →
+                                        </Link>
+
+                                        <Link
+                                            href={`/meteorologia?lat=${a.latitud}&lon=${a.longitud}&zoom=8`}
+                                            className="inline-flex items-center gap-2 text-sm font-medium text-primary hover:underline"
+                                        >
+                                            <Wind
+                                                size={15}
+                                                aria-hidden="true"
+                                            />
+
+                                            {t('show.viewWindMap')} →
                                         </Link>
                                     </div>
                                 </>
@@ -716,9 +743,19 @@ function formatNotamTime(
 
 function MeteorologiaPanel({
     meteorologia,
+    latitude,
+    longitude,
 }: {
     meteorologia?: any;
+    latitude?: number | string | null;
+    longitude?: number | string | null;
 }) {
+    const coordinatesAvailable =
+        latitude !== null &&
+        latitude !== undefined &&
+        longitude !== null &&
+        longitude !== undefined;
+
     if (meteorologia === undefined) {
         return <MeteorologiaLoading />;
     }
@@ -885,6 +922,26 @@ function MeteorologiaPanel({
                     )}
                 </div>
             </div>
+
+            {coordinatesAvailable && (
+                <div className="border-t border-border pt-5">
+                    <Link
+                        href={`/meteorologia?lat=${latitude}&lon=${longitude}&zoom=8`}
+                        className="inline-flex items-center gap-2 text-sm font-medium text-primary transition hover:underline"
+                    >
+                        <Wind
+                            size={16}
+                            aria-hidden="true"
+                        />
+
+                        {i18n.t('show.viewLocalWind')}
+
+                        <span aria-hidden="true">
+                            →
+                        </span>
+                    </Link>
+                </div>
+            )}
 
             <div className="border-t border-border pt-4 text-xs leading-5 text-muted">
                 {i18n.t('show.weather.disclaimer')}

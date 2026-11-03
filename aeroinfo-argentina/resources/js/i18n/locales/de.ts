@@ -10,6 +10,7 @@ const de = {
     nav: {
         aerodromes: 'Flugplätze',
         map: 'Karte',
+        weather: 'Wetter',
         sources: 'Quellen',
 
         mainNavigation:
@@ -204,6 +205,7 @@ const de = {
     },
 
     show: {
+        viewWindMap: 'Windkarte anzeigen',
         noPublishedCode: 'KEIN VERÖFFENTLICHTER CODE', locationNotReported: 'Standort nicht angegeben', viewNationalMap: 'Nationale Karte anzeigen', noRunwayData: 'Für diesen Eintrag sind keine validierten Start- und Landebahndaten hinterlegt.', traceability: 'Nachverfolgbarkeit', unidentifiedSource: 'Nicht identifizierte Quelle', consulted: 'Abgerufen', openSource: 'Quelle öffnen', noReferences: 'Für diesen Eintrag sind keine Referenzen hinterlegt.', georeference: 'Georeferenz', latitude: 'Breitengrad', longitude: 'Längengrad', elevation: 'Höhe', validationStatus: 'Validierungsstatus', openOpenStreetMap: 'In OpenStreetMap öffnen', notice: 'Hinweis', noticeText: 'Diese Seite strukturiert öffentliche Luftfahrtinformationen zur Referenz. Sie ersetzt keine anwendbaren Luftfahrtveröffentlichungen oder Vorfluginformationen.',
         notam: { noData: 'Keine NOTAM-Informationen verfügbar.', noIndicator: 'Für diesen Eintrag ist kein lokaler Indikator für AIS-ANAC-NOTAM-Abfragen hinterlegt.', disabled: 'Die NOTAM-Abfrage ist vorübergehend deaktiviert.', error: 'Die NOTAMs von AIS ANAC konnten derzeit nicht abgerufen werden.', noAerodromeData: 'Für diesen Flugplatz sind keine NOTAM-Informationen verfügbar.', noneActive: 'Keine aktiven NOTAMs', descriptionStart: 'Von AIS ANAC veröffentlichte Hinweise für den Indikator', descriptionEnd: 'Der Originaltext wird immer beibehalten; eine spanische Version wird angezeigt, wenn sie verfügbar ist.', noneForIndicator: 'AIS ANAC meldet derzeit keine aktiven NOTAMs für diesen Indikator.', referenceDisclaimer: 'Quelle: AIS ANAC · Nur Referenzinformation. Sie ersetzt weder das PIB noch offizielle Vorfluginformationskanäle.', openAnac: 'AIS ANAC öffnen', textNotReported: 'Text nicht angegeben' },
         status: { noData: 'Keine Daten', outdated: 'Veraltet', error: 'Fehler', noLocalObservation: 'Keine lokale Beobachtung', disabled: 'Deaktiviert' },
@@ -216,6 +218,8 @@ const de = {
     },
 
     home: {
+        weather: 'Wetter',
+        openWeather: 'Wind und Vorhersage',
         dataProvider:
         'ANAC / Secretaría de Transporte',
         pageTitle: 'Startseite',
@@ -310,6 +314,23 @@ const de = {
         light: 'Hell',
         dark: 'Dunkel',
         system: 'System',
+    },
+
+    weatherMap: {
+        source:
+        'Visualisierung: Windy · Ausgewähltes Modell: ECMWF.',
+        pageTitle: 'Wetter',
+        eyebrow: 'Flugmeteorologie',
+        title: 'Wind über Argentinien',
+        description:
+            'Erkunden Sie Windentwicklung und Wetterbedingungen über Argentinien auf einer interaktiven Karte.',
+        surfaceWind: 'Bodenwind',
+        mapTitle: 'Windkarte',
+        mapSubtitle: 'ECMWF-Modell · Bodenwind',
+        openInteractive: 'In Windy öffnen',
+        iframeTitle: 'Interaktive Windkarte über Argentinien',
+        disclaimer:
+            'Meteorologische Informationen zu Referenzzwecken. Für die operative und Flugvorbereitung sind stets die anwendbaren offiziellen Luftfahrt- und Wetterquellen zu prüfen.',
     },
 };
 

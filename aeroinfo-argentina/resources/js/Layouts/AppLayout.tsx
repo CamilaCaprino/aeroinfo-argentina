@@ -80,6 +80,13 @@ export default function AppLayout({
                             </Link>
 
                             <Link
+                                href="/meteorologia"
+                                className="nav-link"
+                            >
+                                {t('nav.weather')}
+                            </Link>
+
+                            <Link
                                 className="nav-link"
                                 href="/fuentes"
                             >
@@ -179,6 +186,15 @@ export default function AppLayout({
                                 }
                             >
                                 {t('nav.map')}
+                            </MobileNavLink>
+
+                            <MobileNavLink
+                                href="/meteorologia"
+                                onClick={() =>
+                                    setMobileMenuOpen(false)
+                                }
+                            >
+                                {t('nav.weather')}
                             </MobileNavLink>
 
                             <MobileNavLink

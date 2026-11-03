@@ -9,6 +9,7 @@ import {
     Database,
     Map,
     Search,
+    Wind,
 } from 'lucide-react';
 
 import { useState } from 'react';
@@ -213,7 +214,7 @@ export default function Home({
                             )}
 
                             {/* Accesos rápidos */}
-                            <div className="mt-4 grid gap-3 sm:grid-cols-2">
+                            <div className="mt-4 grid gap-3 sm:grid-cols-3">
                                 <Link
                                     href="/aerodromos"
                                     className="argentina-quick-card group"
@@ -266,6 +267,29 @@ export default function Home({
                                             size={
                                                 17
                                             }
+                                            aria-hidden="true"
+                                            className="transition-transform group-hover:scale-105"
+                                        />
+                                    </span>
+                                </Link>
+
+                                <Link
+                                    href="/meteorologia"
+                                    className="argentina-quick-card group"
+                                >
+                                    <div className="min-w-0 text-left">
+                                        <p className="argentina-quick-kicker">
+                                            {t('home.weather')}
+                                        </p>
+
+                                        <p className="mt-1 text-[0.96rem] font-semibold tracking-[-0.012em] text-slate-900">
+                                            {t('home.openWeather')}
+                                        </p>
+                                    </div>
+
+                                    <span className="argentina-quick-icon">
+                                        <Wind
+                                            size={17}
                                             aria-hidden="true"
                                             className="transition-transform group-hover:scale-105"
                                         />

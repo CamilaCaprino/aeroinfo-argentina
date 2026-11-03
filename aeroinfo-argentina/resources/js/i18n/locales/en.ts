@@ -10,6 +10,7 @@ const en = {
     nav: {
         aerodromes: 'Aerodromes',
         map: 'Map',
+        weather: 'Weather',
         sources: 'Sources',
 
         mainNavigation:
@@ -186,6 +187,7 @@ const en = {
     },
 
     show: {
+        viewWindMap: 'View wind map',
         noPublishedCode: 'NO PUBLISHED CODE', locationNotReported: 'Location not reported', viewNationalMap: 'View national map', noRunwayData: 'No validated runway information is associated with this record.', traceability: 'Traceability', unidentifiedSource: 'Unidentified source', consulted: 'Consulted', openSource: 'Open source', noReferences: 'No references are associated with this record.', georeference: 'Georeference', latitude: 'Latitude', longitude: 'Longitude', elevation: 'Elevation', validationStatus: 'Validation status', openOpenStreetMap: 'Open in OpenStreetMap', notice: 'Notice', noticeText: 'This page organizes public aeronautical information for reference. It does not replace applicable aeronautical publications or pre-flight information.',
         notam: { noData: 'No NOTAM information is available.', noIndicator: 'This record has no local indicator associated with AIS ANAC NOTAM queries.', disabled: 'NOTAM queries are temporarily disabled.', error: 'AIS ANAC NOTAMs could not be retrieved at this time.', noAerodromeData: 'No NOTAM information is available for this aerodrome.', noneActive: 'No active NOTAMs', descriptionStart: 'Notices published by AIS ANAC for indicator', descriptionEnd: 'The original text is preserved. When a Spanish version is available it may also be shown.', noneForIndicator: 'AIS ANAC currently reports no active NOTAMs for this indicator.', referenceDisclaimer: 'Source: AIS ANAC · Reference information only. It does not replace the PIB or official pre-flight information channels.', openAnac: 'Open AIS ANAC', textNotReported: 'Text not reported' },
         status: { noData: 'No data', outdated: 'Outdated', error: 'Error', noLocalObservation: 'No local observation', disabled: 'Disabled' },
@@ -198,6 +200,8 @@ const en = {
     },
 
     home: {
+        weather: 'Weather',
+        openWeather: 'Wind and forecast',
         dataProvider:
         'ANAC / Secretaría de Transporte',
         pageTitle: 'Home',
@@ -292,6 +296,23 @@ const en = {
         light: 'Light',
         dark: 'Dark',
         system: 'System',
+    },
+
+    weatherMap: {
+        source:
+        'Visualization: Windy · Selected model: ECMWF.',
+        pageTitle: 'Weather',
+        eyebrow: 'Aeronautical weather',
+        title: 'Wind over Argentina',
+        description:
+            'Explore wind evolution and weather conditions across Argentina through an interactive map.',
+        surfaceWind: 'Surface wind',
+        mapTitle: 'Wind map',
+        mapSubtitle: 'ECMWF model · Surface wind',
+        openInteractive: 'Open in Windy',
+        iframeTitle: 'Interactive wind map over Argentina',
+        disclaimer:
+            'Weather information for reference purposes. For operational and preflight planning, always verify the applicable aeronautical and meteorological sources.',
     },
 };
 
