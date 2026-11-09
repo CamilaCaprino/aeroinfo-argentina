@@ -28,22 +28,47 @@ export default function Meteorologia() {
             queryString
         );
 
+    /*
+    * CONFIGURACIÓN GEOGRÁFICA
+    *
+    * Vista predeterminada:
+    * República Argentina completa.
+    *
+    * Si recibimos coordenadas por URL,
+    * centramos el mapa en ese aeródromo.
+    */
+
+    const DEFAULT_LATITUDE = -38.5;
+    const DEFAULT_LONGITUDE = -63.5;
+    const DEFAULT_ZOOM = 4;
+
+    const latParam = query.get('lat');
+    const lonParam = query.get('lon');
+    const zoomParam = query.get('zoom');
+
     const queryLat =
-        Number(
-            query.get('lat')
-        );
+        latParam !== null && latParam.trim() !== ''
+            ? Number(latParam)
+            : null;
 
     const queryLon =
-        Number(
-            query.get('lon')
-        );
+        lonParam !== null && lonParam.trim() !== ''
+            ? Number(lonParam)
+            : null;
 
     const queryZoom =
-        Number(
-            query.get('zoom')
-        );
+        zoomParam !== null && zoomParam.trim() !== ''
+            ? Number(zoomParam)
+            : null;
+
+    /*
+    * Validamos que realmente existan
+    * coordenadas y estén dentro de rango.
+    */
 
     const hasCoordinates =
+        queryLat !== null &&
+        queryLon !== null &&
         Number.isFinite(queryLat) &&
         Number.isFinite(queryLon) &&
         queryLat >= -90 &&
@@ -51,24 +76,34 @@ export default function Meteorologia() {
         queryLon >= -180 &&
         queryLon <= 180;
 
-    const latitude =
-        hasCoordinates
-            ? queryLat
-            : -38.4;
+    /*
+    * Posición inicial del mapa.
+    */
 
-    const longitude =
-        hasCoordinates
-            ? queryLon
-            : -63.6;
+    const latitude = hasCoordinates
+        ? queryLat
+        : DEFAULT_LATITUDE;
+
+    const longitude = hasCoordinates
+        ? queryLon
+        : DEFAULT_LONGITUDE;
+
+    /*
+    * Zoom:
+    *
+    * 4 = Vista general de Argentina.
+    * 8 = Vista de un aeródromo.
+    */
 
     const zoom =
+        queryZoom !== null &&
         Number.isFinite(queryZoom) &&
         queryZoom >= 3 &&
         queryZoom <= 12
             ? queryZoom
             : hasCoordinates
                 ? 8
-                : 4;
+                : DEFAULT_ZOOM;
 
     const windyUrl =
     'https://embed.windy.com/embed.html?' +
@@ -92,21 +127,10 @@ export default function Meteorologia() {
         lon:
             String(longitude),
 
-        detail:
-            hasCoordinates
-                ? 'true'
-                : '',
-
-        detailLat:
-            String(latitude),
-
-        detailLon:
-            String(longitude),
-
-        marker:
-            hasCoordinates
-                ? 'true'
-                : '',
+        detail: '',
+        detailLat: String(latitude),
+        detailLon: String(longitude),
+        marker: hasCoordinates ? 'true' : '',
 
         message: 'true',
         pressure: 'true',

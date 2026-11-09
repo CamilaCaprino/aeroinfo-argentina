@@ -1,7 +1,8 @@
 import { Head, Link } from '@inertiajs/react';
 import type { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
-import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet';
+import { MapContainer, Marker, Popup } from 'react-leaflet';
+import ArgentinaTileLayer from '../../Components/Map/ArgentinaTileLayer';
 import L from 'leaflet';
 
 import AppLayout from '../../Layouts/AppLayout';
@@ -348,10 +349,7 @@ export default function Show({
                                                 zoomControl
                                                 className="h-full w-full"
                                             >
-                                                <TileLayer
-                                                    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                                                    attribution="&copy; OpenStreetMap contributors"
-                                                />
+                                                <ArgentinaTileLayer variant="color" />
 
                                                 <Marker
                                                     position={[

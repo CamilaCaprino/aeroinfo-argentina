@@ -10,6 +10,7 @@ import MarkerClusterGroup from 'react-leaflet-cluster';
 import L from 'leaflet';
 import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import ArgentinaTileLayer from '../Components/Map/ArgentinaTileLayer';
 
 import AppLayout from '../Layouts/AppLayout';
 
@@ -631,16 +632,7 @@ export default function MapPage({
                             scrollWheelZoom
                             className="h-full w-full"
                         >
-                            <TileLayer
-                                url={
-                                    tileUrl ||
-                                    'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
-                                }
-                                attribution={
-                                    attribution ||
-                                    '&copy; OpenStreetMap contributors'
-                                }
-                            />
+                            <ArgentinaTileLayer variant="color" />
 
                             {openedFromAerodromo && (
                                 <InitialLocation
