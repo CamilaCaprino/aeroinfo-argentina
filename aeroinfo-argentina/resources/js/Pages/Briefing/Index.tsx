@@ -6,6 +6,7 @@ import { CircleMarker, MapContainer, Polyline, Popup, useMap } from 'react-leafl
 import { latLngBounds } from 'leaflet';
 import ArgentinaTileLayer from '../../Components/Map/ArgentinaTileLayer';
 import AppLayout from '../../Layouts/AppLayout';
+import EnRouteWeather from './EnRouteWeather';
 
 type Aerodromo = {
     id: number;
@@ -143,6 +144,7 @@ export default function BriefingIndex({ aerodromos, filters, briefing }: Props) 
                             </span>
                         </div>
                         <RouteOverview briefing={briefing} />
+                        <EnRouteWeather origin={briefing.origin} destination={briefing.destination} />
                         {(['origin', 'destination', 'alternate'] as Role[]).map((role) =>
                             briefing[role] ? (
                                 <BriefingCard key={role} role={role} data={briefing[role]!} />
@@ -374,6 +376,7 @@ function BriefingCard({ role, data }: { role: Role; data: AerodromoBriefing }) {
     const { t } = useTranslation();
     const a = data.aerodromo;
     const metar = data.meteorologia?.metar;
+    const metarData = metar?.status === 'ok' ? metar.data : null;
     const taf = data.meteorologia?.taf;
     const wind = data.meteorologia?.observacion?.data?.wind;
     const n = data.notams;
@@ -398,6 +401,7 @@ function BriefingCard({ role, data }: { role: Role; data: AerodromoBriefing }) {
                     {t('briefing.openAerodrome')} →
                 </Link>
             </header>
+            <MetarSummary data={metarData} />
             <div className="grid gap-3 p-4 md:grid-cols-2 xl:grid-cols-4 sm:p-5">
                 <Metric icon={CloudSun} title="METAR" value={productText(metar, t('briefing.unavailable'))} mono />
                 <Metric icon={CloudSun} title="TAF" value={productText(taf, t('briefing.unavailable'))} mono />
@@ -469,6 +473,113 @@ function BriefingCard({ role, data }: { role: Role; data: AerodromoBriefing }) {
             ) : null}
         </article>
     );
+}
+
+
+/** A compact readout of METAR fields already normalized by MeteorologiaService.
+ * Never infer the flight category or operational suitability from partial data.
+ */
+function MetarSummary({ data }: { data: any }) {
+    const { t, i18n } = useTranslation();
+    const category = typeof data?.flight_category === 'string'
+        ? data.flight_category.trim().toUpperCase() : '';
+    const supportedCategory = ['VFR', 'MVFR', 'IFR', 'LIFR'].includes(category) ? category : null;
+    const observed = typeof data?.observed_at === 'string' ? new Date(data.observed_at) : null;
+    const hasObserved = observed !== null && !Number.isNaN(observed.getTime());
+    const observationAgeHours = hasObserved ? (Date.now() - observed!.getTime()) / 3_600_000 : null;
+    // Two hours is only a visual freshness flag, NOT an aviation validity standard.
+    const isOld = observationAgeHours !== null && observationAgeHours > 2;
+    const wind = data?.wind;
+    const windHasSpeed = finiteNumber(wind?.speed_kt) !== null;
+    const windDirection = wind?.direction_deg == null || wind?.direction_deg === ''
+        ? 'VRB' : formatWindDirection(wind.direction_deg);
+    const windLabel = windHasSpeed
+        ? `${windDirection} · ${Math.round(finiteNumber(wind.speed_kt)!)} kt${finiteNumber(wind?.gust_kt) !== null ? ` · G${Math.round(finiteNumber(wind.gust_kt)!)} kt` : ''}`
+        : '—';
+    const pressure = finiteNumber(data?.pressure_hpa);
+    const temp = finiteNumber(data?.temperature_c);
+    const visibility = metarVisibility(data?.visibility);
+    const fields = [
+        { key: 'wind', value: windLabel },
+        { key: 'visibility', value: visibility },
+        { key: 'temperature', value: temp === null ? '—' : `${Math.round(temp)} °C` },
+        { key: 'qnh', value: pressure === null ? '—' : `${Math.round(pressure)} hPa` },
+    ];
+
+    return (
+        <div className="border-b border-border px-4 py-4 sm:px-5">
+            <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
+                <div className="flex items-center gap-2">
+                    <CloudSun size={16} aria-hidden="true" className="text-primary" />
+                    <h4 className="text-sm font-semibold text-foreground">{t('briefing.metarSummary')}</h4>
+                    {supportedCategory && (
+                        <span className="rounded-md border border-border bg-background px-2 py-0.5 text-xs font-semibold text-foreground">
+                            {supportedCategory}
+                        </span>
+                    )}
+                </div>
+                <span className="text-xs text-muted">
+                    {hasObserved
+                        ? `${t('briefing.observationTime')}: ${new Intl.DateTimeFormat(i18n.language, { timeZone: 'UTC', day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit', hour12: false }).format(observed!)} UTC`
+                        : t('briefing.observationTimeUnknown')}
+                </span>
+            </div>
+            {isOld && (
+                <p role="status" className="mb-3 rounded-lg border border-amber-500/30 bg-amber-500/10 px-3 py-2 text-xs text-foreground">
+                    {t('briefing.metarOlderThanTwoHours')}
+                </p>
+            )}
+            {!data ? (
+                <p className="rounded-lg border border-border bg-background/40 px-3 py-3 text-sm text-muted">
+                    {t('briefing.metarSummaryUnavailable')}
+                </p>
+            ) : (
+                <>
+                    <div className="grid grid-cols-2 gap-2 md:grid-cols-4">
+                        {fields.map((field) => (
+                            <div key={field.key} className="min-w-0 rounded-lg border border-border bg-background/40 px-3 py-3">
+                                <div className="text-[10px] font-semibold uppercase tracking-wider text-muted">
+                                    {t(`briefing.summary_${field.key}`)}
+                                </div>
+                                <div className="mt-1 break-words text-sm font-semibold text-foreground">{field.value}</div>
+                            </div>
+                        ))}
+                    </div>
+                    <p className="mt-2 text-[11px] leading-5 text-muted">
+                        {supportedCategory ? t('briefing.categoryReported') : t('briefing.categoryNotReported')}
+                        {' · '}{t('briefing.metarSummaryReference')}
+                    </p>
+                </>
+            )}
+        </div>
+    );
+}
+
+function finiteNumber(value: unknown): number | null {
+    if (value === null || value === undefined || value === '') return null;
+    const parsed = Number(value);
+    return Number.isFinite(parsed) ? parsed : null;
+}
+
+function formatWindDirection(value: unknown): string {
+    if (String(value).toUpperCase() === 'VRB') return 'VRB';
+    const degrees = finiteNumber(value);
+    return degrees === null ? '—' : `${Math.round(degrees)}°`;
+}
+
+/** Normalized METAR visibility is stored in statute miles by the existing service. */
+function metarVisibility(value: unknown): string {
+    if (value === null || value === undefined || value === '') return '—';
+    if (typeof value === 'string' && value.includes('+')) return '≥ 10 km';
+    const statuteMiles = finiteNumber(value);
+    if (statuteMiles === null || statuteMiles < 0) return '—';
+    const meters = statuteMiles * 1609.344;
+    if (meters >= 9500) return '≥ 10 km';
+    if (meters >= 1000) {
+        const km = meters / 1000;
+        return `${km >= 5 ? km.toFixed(0) : km.toFixed(1)} km`;
+    }
+    return `${Math.round(meters / 100) * 100} m`;
 }
 
 function NotamDetail({ notam }: { notam: Notam }) {

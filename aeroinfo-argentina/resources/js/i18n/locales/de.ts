@@ -24,6 +24,7 @@ const de = {
 
         closeMenu:
             'Menü schließen',
+        briefing: 'Flugbriefing',
     },
 
     common: {
@@ -244,6 +245,8 @@ const de = {
             'Geografische Ansicht',
         openMap:
             'Interaktive Karte öffnen',
+        briefing: 'Flugbriefing',
+        openBriefing: 'Flugstrecke planen',
     },
 
     map: {
@@ -374,6 +377,43 @@ const de = {
         alternateSegment: 'Verbindung zum Ausweichflugplatz',
         routeNoCoordinates: 'Für die Kartendarstellung sind nicht genügend Koordinaten vorhanden.',
         routeDisclaimer: 'Schematische Linien zwischen Flugplätzen und ungefähre Großkreisentfernungen. Keine Luftstraßen, genehmigte Flugroute oder Flugplanung. Amtliche Betriebsinformationen prüfen.',
+        metarSummary: 'Zusammenfassung der letzten METAR-Beobachtung',
+        observationTime: 'Beobachtet',
+        observationTimeUnknown: 'Beobachtungszeit nicht verfügbar',
+        metarOlderThanTwoHours: 'Diese METAR-Beobachtung ist älter als 2 Stunden. Aktuelle Daten bei der offiziellen Quelle prüfen.',
+        metarSummaryUnavailable: 'Kein METAR für eine Zusammenfassung verfügbar.',
+        summary_wind: 'METAR-Wind',
+        summary_visibility: 'Sichtweite',
+        summary_temperature: 'Temperatur',
+        summary_qnh: 'QNH',
+        categoryReported: 'Flugkategorie laut Datenquelle',
+        categoryNotReported: 'Flugkategorie nicht von der Quelle gemeldet',
+        metarSummaryReference: 'Übersicht zur Orientierung; Original-METAR prüfen.',
+        enRouteTitle: 'Streckenwetter',
+        enRouteDescription: 'ECMWF-Prognose an drei Zwischenpunkten (25 %, 50 % und 75 %) der direkten Strecke zwischen Start und Ziel.',
+        enRouteDeparture: 'Geplanter Abflug (UTC)',
+        enRouteSpeed: 'Geschätzte Geschwindigkeit über Grund (kt)',
+        enRouteConsult: 'Prognose abrufen',
+        enRouteLoading: 'Wird geladen…',
+        enRouteGroundSpeedNote: 'Die Überflugzeiten sind Näherungswerte aus direkter Entfernung und konstanter Geschwindigkeit über Grund; Wind, Steigflug, Sinkflug und veröffentlichte Flugwege sind nicht berücksichtigt.',
+        enRouteDateRange: 'Wähle einen Abflug ab jetzt innerhalb der nächsten neun Tage. UTC beachten.',
+        enRouteNoData: 'Für die geschätzten Zeiten wurden keine Prognosedaten geliefert.',
+        enRouteError: 'Open-Meteo konnte nicht erreicht werden. Verbindung prüfen und erneut versuchen.',
+        enRoutePoint: 'Punkt {{percent}} %',
+        enRouteEta: 'Geschätzter Überflug',
+        enRouteModelHour: 'Prognosezeit',
+        enRouteTemperature: 'Temperatur in 2 m',
+        enRouteCloud: 'Gesamtbewölkung',
+        enRouteWind: 'Wind in 10 m',
+        enRouteNoPointData: 'Für diesen Punkt und Zeitpunkt sind keine Prognosedaten verfügbar.',
+        enRouteWarning: 'Prognosewerte in Bodennähe (Temperatur in 2 m, Wind in 10 m), KEINE Wetterdaten in Reiseflughöhe oder zertifizierte Flugwettervorhersage. Die Punkte liegen auf einer schematischen Großkreisstrecke, nicht auf Luftstraßen.',
+        enRouteSource: 'Quelle: Open-Meteo / ECMWF IFS. Vor dem Flug amtliche Flugwetterinformationen und Luftfahrtveröffentlichungen prüfen.',
+        enRouteLevel: 'Referenzdruckniveau',
+        enRouteSurface: 'Bodennah (2 m / 10 m)',
+        enRouteTemperatureLevel: 'Temperatur auf Druckniveau',
+        enRouteWindLevel: 'Wind auf Druckniveau',
+        enRouteGeopotential: 'Geopotenzielle Höhe des Druckniveaus',
+        enRoutePressureWarning: 'Druckniveaus entsprechen keiner festen Höhe oder Flugfläche; die geopotenzielle Höhe ist näherungsweise. ECMWF IFS 0,25° hat eine begrenzte Auflösung und ersetzt keine offiziellen Flugwetterprodukte.',
     },
 };
 

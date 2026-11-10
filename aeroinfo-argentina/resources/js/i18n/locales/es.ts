@@ -24,6 +24,7 @@ const es = {
 
         closeMenu:
             'Cerrar menú',
+        briefing: 'Briefing',
     },
 
     common: {
@@ -342,6 +343,8 @@ const es = {
             'Visualización territorial',
         openMap:
             'Abrir mapa interactivo',
+        briefing: 'Briefing de vuelo',
+        openBriefing: 'Planificar recorrido',
     },
 
     map: {
@@ -472,6 +475,43 @@ const es = {
         alternateSegment: 'Tramo al alternativo',
         routeNoCoordinates: 'No hay coordenadas suficientes para representar el recorrido.',
         routeDisclaimer: 'Líneas esquemáticas entre aeródromos y distancias ortodrómicas aproximadas. No representan aerovías, una ruta autorizada ni un plan de vuelo. Verificá información operacional oficial.',
+        metarSummary: 'Resumen de la última observación METAR',
+        observationTime: 'Observado',
+        observationTimeUnknown: 'Hora de observación no disponible',
+        metarOlderThanTwoHours: 'La observación METAR tiene más de 2 horas. Verificá la información actualizada en la fuente oficial.',
+        metarSummaryUnavailable: 'Sin METAR disponible para mostrar un resumen.',
+        summary_wind: 'Viento METAR',
+        summary_visibility: 'Visibilidad',
+        summary_temperature: 'Temperatura',
+        summary_qnh: 'QNH',
+        categoryReported: 'Categoría de vuelo informada por la fuente',
+        categoryNotReported: 'Categoría de vuelo no informada por la fuente',
+        metarSummaryReference: 'Lectura rápida de referencia; consultá el METAR original.',
+        enRouteTitle: 'Meteorología en ruta',
+        enRouteDescription: 'Pronóstico ECMWF en tres puntos intermedios del tramo directo entre origen y destino (25 %, 50 % y 75 %).',
+        enRouteDeparture: 'Salida estimada (UTC)',
+        enRouteSpeed: 'Velocidad estimada sobre el suelo (kt)',
+        enRouteConsult: 'Consultar pronóstico',
+        enRouteLoading: 'Consultando…',
+        enRouteGroundSpeedNote: 'La hora de paso es aproximada: se calcula con distancia directa y velocidad constante sobre el suelo; no considera viento, ascenso, descenso ni ruta publicada.',
+        enRouteDateRange: 'Seleccioná una salida desde ahora y dentro de los próximos nueve días. Verificá la hora UTC.',
+        enRouteNoData: 'La fuente no devolvió datos para las horas estimadas.',
+        enRouteError: 'No fue posible consultar Open-Meteo. Comprobá la conexión y volvé a intentar.',
+        enRoutePoint: 'Punto {{percent}} %',
+        enRouteEta: 'Paso estimado',
+        enRouteModelHour: 'Hora del pronóstico',
+        enRouteTemperature: 'Temperatura a 2 m',
+        enRouteCloud: 'Nubosidad total',
+        enRouteWind: 'Viento a 10 m',
+        enRouteNoPointData: 'Sin pronóstico disponible para este punto y hora.',
+        enRouteWarning: 'Valores de pronóstico cerca de la superficie (temperatura a 2 m y viento a 10 m), NO meteorología a altitud de crucero ni un pronóstico aeronáutico certificado. Los puntos siguen el tramo geodésico esquemático, no aerovías.',
+        enRouteSource: 'Fuente: Open-Meteo / ECMWF IFS. Corroborá con los productos meteorológicos y publicaciones aeronáuticas oficiales antes de volar.',
+        enRouteLevel: 'Nivel de referencia',
+        enRouteSurface: 'Superficie (2 m / 10 m)',
+        enRouteTemperatureLevel: 'Temperatura en nivel',
+        enRouteWindLevel: 'Viento en nivel',
+        enRouteGeopotential: 'Altura geopotencial del nivel',
+        enRoutePressureWarning: 'Los niveles de presión no equivalen a una altitud fija ni a un nivel de vuelo; la altura geopotencial es aproximada. El ECMWF IFS 0,25° tiene resolución limitada y no reemplaza productos meteorológicos aeronáuticos oficiales.',
     },
 };
 

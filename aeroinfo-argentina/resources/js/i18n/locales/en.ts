@@ -24,6 +24,7 @@ const en = {
 
         closeMenu:
             'Close menu',
+        briefing: 'Flight briefing',
     },
 
     common: {
@@ -226,6 +227,8 @@ const en = {
             'Geographic view',
         openMap:
             'Open interactive map',
+        briefing: 'Flight briefing',
+        openBriefing: 'Plan a route',
     },
 
     map: {
@@ -356,6 +359,43 @@ const en = {
         alternateSegment: 'Alternate segment',
         routeNoCoordinates: 'Not enough coordinates to display this route.',
         routeDisclaimer: 'Schematic lines between aerodromes and approximate great-circle distances. These do not depict airways, an authorized route, or a flight plan. Verify official operational information.',
+        metarSummary: 'Latest METAR observation overview',
+        observationTime: 'Observed',
+        observationTimeUnknown: 'Observation time unavailable',
+        metarOlderThanTwoHours: 'This METAR observation is more than 2 hours old. Verify updated information with the official source.',
+        metarSummaryUnavailable: 'No METAR available for a summary.',
+        summary_wind: 'METAR wind',
+        summary_visibility: 'Visibility',
+        summary_temperature: 'Temperature',
+        summary_qnh: 'QNH',
+        categoryReported: 'Flight category reported by the source',
+        categoryNotReported: 'Flight category not reported by the source',
+        metarSummaryReference: 'Reference summary; check the original METAR.',
+        enRouteTitle: 'En-route weather',
+        enRouteDescription: 'ECMWF forecast at three intermediate points (25%, 50% and 75%) along the direct origin-to-destination segment.',
+        enRouteDeparture: 'Estimated departure (UTC)',
+        enRouteSpeed: 'Estimated ground speed (kt)',
+        enRouteConsult: 'Get forecast',
+        enRouteLoading: 'Loading…',
+        enRouteGroundSpeedNote: 'Passage times are approximate: direct distance and constant ground speed; no wind, climb, descent or published routing is accounted for.',
+        enRouteDateRange: 'Select a departure from now and within the next nine days. Check UTC.',
+        enRouteNoData: 'The source returned no forecast for the estimated times.',
+        enRouteError: 'Could not reach Open-Meteo. Check your connection and retry.',
+        enRoutePoint: 'Point {{percent}}%',
+        enRouteEta: 'Estimated passage',
+        enRouteModelHour: 'Forecast hour',
+        enRouteTemperature: 'Temperature at 2 m',
+        enRouteCloud: 'Total cloud cover',
+        enRouteWind: 'Wind at 10 m',
+        enRouteNoPointData: 'No forecast available for this point and time.',
+        enRouteWarning: 'Near-surface forecast values (2 m temperature and 10 m wind), NOT cruise-altitude weather or a certified aviation forecast. Points follow a schematic great-circle segment, not airways.',
+        enRouteSource: 'Source: Open-Meteo / ECMWF IFS. Verify official aviation weather and publications before flight.',
+        enRouteLevel: 'Reference level',
+        enRouteSurface: 'Surface (2 m / 10 m)',
+        enRouteTemperatureLevel: 'Level temperature',
+        enRouteWindLevel: 'Level wind',
+        enRouteGeopotential: 'Geopotential height of level',
+        enRoutePressureWarning: 'Pressure levels are not fixed altitudes or flight levels; geopotential height is approximate. ECMWF IFS 0.25° has limited resolution and does not replace official aviation weather products.',
     },
 };
 

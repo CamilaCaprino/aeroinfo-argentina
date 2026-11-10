@@ -9,6 +9,7 @@ import {
     Database,
     Map,
     Search,
+    Route,
     Wind,
 } from 'lucide-react';
 
@@ -214,7 +215,7 @@ export default function Home({
                             )}
 
                             {/* Accesos rápidos */}
-                            <div className="mt-4 grid gap-3 sm:grid-cols-3">
+                            <div className="mt-4 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
                                 <Link
                                     href="/aerodromos"
                                     className="argentina-quick-card group"
@@ -289,6 +290,29 @@ export default function Home({
 
                                     <span className="argentina-quick-icon">
                                         <Wind
+                                            size={17}
+                                            aria-hidden="true"
+                                            className="transition-transform group-hover:scale-105"
+                                        />
+                                    </span>
+                                </Link>
+
+                                <Link
+                                    href="/briefing"
+                                    className="argentina-quick-card group"
+                                >
+                                    <div className="min-w-0 text-left">
+                                        <p className="argentina-quick-kicker">
+                                            {t('home.briefing')}
+                                        </p>
+
+                                        <p className="mt-1 text-[0.96rem] font-semibold tracking-[-0.012em] text-slate-900">
+                                            {t('home.openBriefing')}
+                                        </p>
+                                    </div>
+
+                                    <span className="argentina-quick-icon">
+                                        <Route
                                             size={17}
                                             aria-hidden="true"
                                             className="transition-transform group-hover:scale-105"

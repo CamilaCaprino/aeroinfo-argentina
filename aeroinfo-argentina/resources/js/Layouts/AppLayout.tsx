@@ -93,6 +93,13 @@ export default function AppLayout({
                             </Link>
 
                             <Link
+                                href="/briefing"
+                                className="nav-link"
+                            >
+                                {t('nav.briefing')}
+                            </Link>
+
+                            <Link
                                 className="nav-link"
                                 href="/fuentes"
                             >
@@ -203,6 +210,13 @@ export default function AppLayout({
                                 }
                             >
                                 {t('nav.weather')}
+                            </MobileNavLink>
+
+                            <MobileNavLink
+                                href="/briefing"
+                                onClick={closeMobileMenu}
+                            >
+                                {t('nav.briefing')}
                             </MobileNavLink>
 
                             <MobileNavLink
